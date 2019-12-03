@@ -14,6 +14,10 @@ var currentSelected = null
 
 const props = {
   data: Object,
+  gridWidth:{
+    type: Number,
+    default: 20
+  },
   marginX: {
     type: Number,
     default: 20
@@ -109,12 +113,33 @@ export default {
       }
       // griddata.grid.each(d => { d.id = i++ })
       
-      const size = this.getSize()
+      // const size = this.getSize()
       griddata.startX=this.marginX
       griddata.startY=this.marginY
-      griddata.endX=size.width-this.marginX
-      griddata.endY=size.width-this.marginY
+      // griddata.endX=size.width-this.marginX
+      // griddata.endY=size.height-this.marginY
       this.internaldata.griddata= griddata
+      //比例尺
+      this.internaldata.scalex = d3.scaleLinear()
+      .domain([griddata.startposX, griddata.endposX])
+      .range([griddata.startX, griddata.startX+griddata.xcount*this.gridWidth]);
+
+      this.internaldata.scalew = d3.scaleLinear()
+      .domain([0, griddata.width])
+      .range([0, this.gridWidth]);
+
+      const h = this.gridWidth / griddata.width * griddata.height //计算长高比例
+
+      //比例尺
+      this.internaldata.scaley = d3.scaleLinear()
+      .domain([griddata.startposY, griddata.endposY])
+      .range([griddata.startY, griddata.startY+griddata.ycount* h]);
+
+      this.internaldata.scaleh = d3.scaleLinear()
+      .domain([0, griddata.height])
+      .range([0, h]);
+      
+      // console.log(griddata.startX,griddata.endX,griddata.startposX,griddata.endposX,this.internaldata.scalex(griddata.startposX))
       this.redraw()
     },
     redraw(){
@@ -128,6 +153,7 @@ export default {
       // TODO: 动画效果
       return new Promise((resolve, reject) => {
         this.clean()
+        let {scalex,scalew,scaley,scaleh} = this.internaldata
         this.internaldata.row = this.internaldata.g.selectAll(".row")
         .data(griddata.grid)
         .enter()
@@ -139,12 +165,12 @@ export default {
         .enter()
         .append("rect")
         .attr("class", "square")
-        .attr("x", function(d) { return d.x; })
-        .attr("y", function(d) { return d.y; })
+        .attr("x", function(d) { return scalex(d.x); })
+        .attr("y", function(d) { return scaley(d.y); })
         .attr("xindex", function(d) { return d.xindex; })
         .attr("yindex", function(d) { return d.yindex; })
-        .attr("width", function(d) { return d.width; })
-        .attr("height", function(d) { return d.height; })
+        .attr("width", function(d) { return scalew(d.width); })
+        .attr("height", function(d) { return scaleh(d.height); })
         .style("fill", function(d) { return d.attrs.initHead.color; })
         .style("stroke", "#222")
         .on('mouseover', function(d) {

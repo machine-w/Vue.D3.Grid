@@ -21,7 +21,7 @@ var getRandomColor = function(){
     return '#'+Math.floor(Math.random()*16777215).toString(16);
 }
 
-function oriGridDataRow(width,height,startx,starty){
+function oriGridDataRow(width,height,startx,starty,xcount,ycount){
 
     // let marginTop = 50;
     // let marginLeft = 50;
@@ -30,17 +30,17 @@ function oriGridDataRow(width,height,startx,starty){
     let ypos = starty;
 
     // iterate for rows
-    for (var row = 0; row < 3; row ++){
+    for (var row = 0; row < xcount; row ++){
     data.push(new Array());
 
     //iterate for cells/columns inside rows
-    for (var column = 0; column < 100; column ++){
+    for (var column = 0; column < ycount; column ++){
         
         data[row].push({
         xindex:row,
         yindex:column,
         x: xpos,
-        y: randomNum(ypos-50,ypos+50),
+        y: randomNum(ypos-30,ypos+30),
         width: width,
         height: height,
         click: 0,
@@ -62,22 +62,24 @@ function oriGridDataRow(width,height,startx,starty){
     ypos +=  height;
     }
 
-    return data;
+    let res={grid:data,startposX:startx,startposY:starty,endposY:starty+ycount*height,endposX:startx+xcount*width,height:height,ycount:ycount,width:width,xcount:xcount}
+
+    return res;
 }
-function oriGridData(width,height,startx,starty){
+function oriGridData(width,height,startx,starty,xcount,ycount){
 
     // let marginTop = 50;
     // let marginLeft = 50;
-    var data = new Array();
+    let data = new Array();
     let xpos = startx;
     let ypos = starty;
 
     // iterate for rows
-    for (var row = 0; row < 100; row ++){
+    for (let row = 0; row < xcount; row ++){
     data.push(new Array());
 
     //iterate for cells/columns inside rows
-    for (var column = 0; column < 100; column ++){
+    for (let column = 0; column < ycount; column ++){
         
         data[row].push({
         xindex:row,
@@ -99,11 +101,12 @@ function oriGridData(width,height,startx,starty){
     // increment the y position for the next row;
     ypos +=  height;
     }
+    let res={grid:data,startposX:startx,startposY:starty,height:height,ycount:ycount,width:width,xcount:xcount,endposY:starty+ycount*height,endposX:startx+xcount*width,}
 
-    return data;
+    return res;
 }
 
 
-Mock.mock('/api/getGridDataRow','get',{grid:oriGridDataRow(10,10,50,50)});
-Mock.mock('/api/getGridDataColum','get',{grid:oriGridDataRow(30,70,50,50)});
-Mock.mock('/api/getGridDataLayer','get',{grid:oriGridData(30,30,50,50)});
+Mock.mock('/api/getGridDataRow','get',oriGridDataRow(100,100,230,2340,30,100));
+Mock.mock('/api/getGridDataColum','get',oriGridDataRow(300,700,50,50,10,100));
+Mock.mock('/api/getGridDataLayer','get',oriGridData(3000,9000,23430,234,100,100));
