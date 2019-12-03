@@ -23,9 +23,6 @@ const props = {
 const directives = {
   resize
 }
-// function zoomed(grid) {
-//       grid.attr("transform", d3.event.transform);
-// }
 
 
 export default {
@@ -51,19 +48,16 @@ export default {
     let zoom = null
     if (this.zoomable) {
       g = svg.append('g')
-      zoom = d3.zoom().scaleExtent([0.9, 8]).on('zoom', this.zoomed(g))
+      zoom = d3.zoom().scaleExtent([0.2, 8]).on('zoom', this.zoomed(g))
       svg.call(zoom).on('wheel', () => d3.event.preventDefault())
       svg.call(zoom.transform, d3.zoomIdentity)
-    } else {
-      g = this.transformSvg(svg.append('g'), size)
     }
     this.internaldata = {
       svg,
       g,
       zoom
-    } // {#}
+    }
     
-    console.log(size)
     this.data.grid && this.onData(this.data.grid)
   },
 
@@ -96,6 +90,11 @@ export default {
         g.attr('transform', d3.event.transform)
       }
     },
+    // removeZoom () {
+    //   const { internaldata } = this
+    //   internaldata.zoom.on('zoom', null)
+    //   internaldata.zoom = null
+    // },
 
     onData(griddata) {
       this.clean()
@@ -119,7 +118,7 @@ export default {
       .attr("yindex", function(d) { return d.yindex; })
       .attr("width", function(d) { return d.width; })
       .attr("height", function(d) { return d.height; })
-      .style("fill", "#fff")
+      .style("fill", function(d) { return d.attrs.initHead.color; })
       .style("stroke", "#222")
       // .on('mouseover', function(d) {
       //   d3.select(this).style("fill","#4682B4");
@@ -142,6 +141,13 @@ export default {
     data (current, old) {
       this.onData(current.grid)
     },
+    // zoomable (newValue) {
+    //   if (newValue) {
+    //     this.internaldata.zoom = this.setUpZoom()
+    //     return
+    //   }
+    //   this.removeZoom()
+    // }
   }
 }
 </script>

@@ -5,26 +5,29 @@ import orders from './orders'
 
 
 function randomNum(minNum,maxNum){ 
-switch(arguments.length){ 
-    case 1: 
-        return parseInt(Math.random()*minNum+1,10); 
-    break; 
-    case 2: 
-        return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
-    break; 
-        default: 
-            return 0; 
+    switch(arguments.length){ 
+        case 1: 
+            return parseInt(Math.random()*minNum+1,10); 
         break; 
+        case 2: 
+            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
+        break; 
+            default: 
+                return 0; 
+            break; 
+    } 
 } 
-} 
+var getRandomColor = function(){
+    return '#'+Math.floor(Math.random()*16777215).toString(16);
+}
 
-function oriGridDataRow(width,height){
+function oriGridDataRow(width,height,startx,starty){
 
-    let marginTop = 50;
-    let marginLeft = 50;
+    // let marginTop = 50;
+    // let marginLeft = 50;
     var data = new Array();
-    let xpos = marginLeft;
-    let ypos = marginTop;
+    let xpos = startx;
+    let ypos = starty;
 
     // iterate for rows
     for (var row = 0; row < 3; row ++){
@@ -41,7 +44,7 @@ function oriGridDataRow(width,height){
         width: width,
         height: height,
         click: 0,
-        attrs:{initHead:{zone:1,values:[1.2,1.0,3]}}
+        attrs:{initHead:{zone:1,values:[1.2,1.0,3],color:getRandomColor()}}
         });
 
         if(row > 0){
@@ -54,20 +57,20 @@ function oriGridDataRow(width,height){
     }
 
     // reset the x position after a row is complete
-    xpos = marginLeft;
+    xpos = startx;
     // increment the y position for the next row;
     ypos +=  height;
     }
 
     return data;
 }
-function oriGridData(width,height){
+function oriGridData(width,height,startx,starty){
 
-    let marginTop = 50;
-    let marginLeft = 50;
+    // let marginTop = 50;
+    // let marginLeft = 50;
     var data = new Array();
-    let xpos = marginLeft;
-    let ypos = marginTop;
+    let xpos = startx;
+    let ypos = starty;
 
     // iterate for rows
     for (var row = 0; row < 100; row ++){
@@ -84,16 +87,15 @@ function oriGridData(width,height){
         width: width,
         height: height,
         click: 0,
-        attrs:{initHead:{zone:1,values:[1.2,1.0,3]}}
+        attrs:{initHead:{zone:1,values:[1.2,1.0,3],color:getRandomColor()}}
         });
-        
-
+    
         // increment the x position
         xpos += width;
     }
 
     // reset the x position after a row is complete
-    xpos = marginLeft;
+    xpos = startx;
     // increment the y position for the next row;
     ypos +=  height;
     }
@@ -102,6 +104,6 @@ function oriGridData(width,height){
 }
 
 
-Mock.mock('/api/getGridDataRow','get',{grid:oriGridData(10,10)});
-Mock.mock('/api/getGridDataColum','get',{grid:oriGridDataRow(30,70)});
-Mock.mock('/api/getGridDataLayer','get',{grid:oriGridData(30,30)});
+Mock.mock('/api/getGridDataRow','get',{grid:oriGridDataRow(10,10,50,50)});
+Mock.mock('/api/getGridDataColum','get',{grid:oriGridDataRow(30,70,50,50)});
+Mock.mock('/api/getGridDataLayer','get',{grid:oriGridData(30,30,50,50)});

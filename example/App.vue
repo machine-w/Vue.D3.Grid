@@ -80,7 +80,11 @@
             <i class="fa fa-binoculars" aria-hidden="true"></i>           
             </button>
 
-            <button v-if="zoomable" type="button" class="btn btn-warning" @click="resetZoom" data-toggle="tooltip" data-placement="top" title="Reset Zoom">
+            <button type="button"  class="btn btn-warning" @click="getAllOrdersRow" data-toggle="tooltip" data-placement="top" title="freshData">
+            <i class="fa fa-arrows-alt" aria-hidden="true"></i>           
+            </button>
+
+            <button type="button" class="btn btn-warning" @click="getAllOrders" data-toggle="tooltip" data-placement="top" title="Reset Zoom">
             <i class="fa fa-arrows-alt" aria-hidden="true"></i>                             
             </button>
 
@@ -168,6 +172,12 @@ export default {
       this.$refs['tree'].resetZoom().then(() => { this.isLoading = false })
     },
     getAllOrders() {
+      axios.get("/api/getGridDataLayer").then(res => {
+        this.griddata = res.data
+        // console.log(res.data.data);
+      });
+    },
+    getAllOrdersRow() {
       axios.get("/api/getGridDataRow").then(res => {
         this.griddata = res.data
         // console.log(res.data.data);
