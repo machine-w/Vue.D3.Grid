@@ -14,6 +14,14 @@ var currentSelected = null
 
 const props = {
   data: Object,
+  marginX: {
+    type: Number,
+    default: 20
+  },
+  marginY: {
+    type: Number,
+    default: 20
+  },
   zoomable: {
     type: Boolean,
     default: false
@@ -58,7 +66,7 @@ export default {
       zoom
     }
     
-    this.data.grid && this.onData(this.data.grid)
+    this.data && this.onData(this.data)
   },
 
   methods: {
@@ -72,19 +80,15 @@ export default {
       this.internaldata.svg
               .attr('width', size.width)
               .attr('height', size.height)
-      // this.layout.size(this.internaldata.tree, size, this.margin, this.maxTextLenght)
-      // this.applyZoom(size)
       this.onData(this.internaldata.griddata)
     },
     clean () {
-      console.log(this.internaldata)
-      this.internaldata.g.selectAll(".row").remove(); // {#}
+      this.internaldata.g.selectAll(".row").remove(); 
     },
     zoomed (g) {
       return () => {
         const transform = d3.event.transform
         const size = this.getSize()
-        //const transformToApply = this.updateTransform(transform, size)
         this.currentTransform = transform
         this.$emit('zoom', {transform})
         g.attr('transform', d3.event.transform)
@@ -97,38 +101,64 @@ export default {
     // },
 
     onData(griddata) {
-      this.clean()
-      if (!griddata) {
+      
+      if (!griddata && !griddata.grid) {
+        this.internaldata.griddata = null
+        this.clean()
         return
       }
+      // griddata.grid.each(d => { d.id = i++ })
+      
+      const size = this.getSize()
+      griddata.startX=this.marginX
+      griddata.startY=this.marginY
+      griddata.endX=size.width-this.marginX
+      griddata.endY=size.width-this.marginY
       this.internaldata.griddata= griddata
-      this.internaldata.row = this.internaldata.g.selectAll(".row")
-      .data(griddata)
-      .enter()
-      .append("g")
-      .attr("class", "row");
-      this.internaldata.cells = this.internaldata.row.selectAll(".square")
-      .data(function(d) {return d;})
-      .enter()
-      .append("rect")
-      .attr("class", "square")
-      .attr("x", function(d) { return d.x; })
-      .attr("y", function(d) { return d.y; })
-      .attr("xindex", function(d) { return d.xindex; })
-      .attr("yindex", function(d) { return d.yindex; })
-      .attr("width", function(d) { return d.width; })
-      .attr("height", function(d) { return d.height; })
-      .style("fill", function(d) { return d.attrs.initHead.color; })
-      .style("stroke", "#222")
-      // .on('mouseover', function(d) {
-      //   d3.select(this).style("fill","#4682B4");
-      // })
-      // .on("mouseout",function(d,i){
-      // 	d3.select(this)
-      // 	  .transition()
-      // 	  .style("fill","#fff");
-      // });
+      this.redraw()
+    },
+    redraw(){
+      const griddata = this.internaldata.griddata
+      if (griddata) {
+        return this.updateGraph(griddata)
+      }
+      return Promise.resolve('no graph')
+    },
+    updateGraph (griddata) {
+      // TODO: 动画效果
+      return new Promise((resolve, reject) => {
+        this.clean()
+        this.internaldata.row = this.internaldata.g.selectAll(".row")
+        .data(griddata.grid)
+        .enter()
+        .append("g")
+        .attr("class", "row");
+
+        this.internaldata.cells = this.internaldata.row.selectAll(".square")
+        .data(function(d) {return d;})
+        .enter()
+        .append("rect")
+        .attr("class", "square")
+        .attr("x", function(d) { return d.x; })
+        .attr("y", function(d) { return d.y; })
+        .attr("xindex", function(d) { return d.xindex; })
+        .attr("yindex", function(d) { return d.yindex; })
+        .attr("width", function(d) { return d.width; })
+        .attr("height", function(d) { return d.height; })
+        .style("fill", function(d) { return d.attrs.initHead.color; })
+        .style("stroke", "#222")
+        .on('mouseover', function(d) {
+          d3.select(this).style("fill","#4682B4");
+        })
+        .on("mouseout",function(d,i){
+        	d3.select(this)
+        	  .transition()
+        	  .style("fill",function(d) { return d.attrs.initHead.color; });
+        });
+        resolve('ok')
+      });
     }
+
   },
 
   computed: {
@@ -139,7 +169,7 @@ export default {
 
   watch: {
     data (current, old) {
-      this.onData(current.grid)
+      this.onData(current)
     },
     // zoomable (newValue) {
     //   if (newValue) {
