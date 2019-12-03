@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
+import './mock/index.js'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'font-awesome/less/font-awesome.less'
 
 Vue.config.productionTip = false
 
