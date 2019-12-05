@@ -14,17 +14,17 @@ var currentSelected = null
 
 const props = {
   data: Object,
-  gridWidth:{
+  latticeWidth:{
     type: Number,
     default: 20
   },
   marginX: {
     type: Number,
-    default: 20
+    default: 60
   },
   marginY: {
     type: Number,
-    default: 20
+    default: 40
   },
   zoomable: {
     type: Boolean,
@@ -55,18 +55,38 @@ export default {
     let svg = d3.select(this.$el).append('svg')
           .attr('width', size.width)
           .attr('height', size.height)
-    var grid = svg.append('g')
-    let g = null
-    let zoom = null
-    if (this.zoomable) {
-      g = svg.append('g')
-      zoom = d3.zoom().scaleExtent([0.2, 8]).on('zoom', this.zoomed(g))
-      svg.call(zoom).on('wheel', () => d3.event.preventDefault())
-      svg.call(zoom.transform, d3.zoomIdentity)
-    }
+    let grid = svg.append('g')
+    // let g = null
+    // let zoom = null
+    // if (this.zoomable) {
+    //   g = svg.append('g')
+    //   zoom = d3.zoom().scaleExtent([0.2, 8]).on('zoom', this.zoomed(g))
+    //   svg.call(zoom).on('wheel', () => d3.event.preventDefault())
+    //   svg.call(zoom.transform, d3.zoomIdentity)
+    // }
+    //////////////////////////////////////////////////////////////////
+    let clip = svg.append("defs")
+        // .attr("class", "clip")
+        .append("SVG:clipPath")
+        .attr("id", "clip")
+        .append("SVG:rect")
+        .attr("width", size.width )
+        .attr("height", size.height )
+        .attr("x", this.marginX)
+        .attr("y", this.marginY);
+    let scatter = svg.append('g')
+        .attr("clip-path", "url(#clip)")
+        // .attr("class", "clip")
+    var zoom = d3.zoom()
+      .scaleExtent([.1, 100])  // This control how much you can unzoom (x0.5) and zoom (x20)
+      .extent([[0, 0], [size.width, size.height]])
+      .on("zoom", this.updateChart);
+
+    svg.call(zoom).on('wheel', () => d3.event.preventDefault())
     this.internaldata = {
       svg,
-      g,
+      scatter,
+      clip,
       zoom
     }
     
@@ -77,6 +97,7 @@ export default {
     getSize () {
       var width = this.$el.clientWidth
       var height = this.$el.clientHeight
+      // console.log(width,height)
       return { width, height }
     },
     resize () {
@@ -84,29 +105,31 @@ export default {
       this.internaldata.svg
               .attr('width', size.width)
               .attr('height', size.height)
-      this.onData(this.internaldata.griddata)
+      // this.onData(this.internaldata.griddata)
+      this.redraw()
     },
     clean () {
       ['.row', '.axis'].forEach(selector => {
-        this.internaldata.g.selectAll(selector).remove()
+        this.internaldata.svg.selectAll(selector).remove()
       })
-      // this.internaldata.g.selectAll(".row").remove(); 
     },
-    zoomed (g) {
-      return () => {
-        const transform = d3.event.transform
-        const size = this.getSize()
-        this.currentTransform = transform
-        this.$emit('zoom', {transform})
-        g.attr('transform', d3.event.transform)
-      }
-    },
-    // removeZoom () {
-    //   const { internaldata } = this
-    //   internaldata.zoom.on('zoom', null)
-    //   internaldata.zoom = null
+    // zoomed (g) {
+    //   return () => {
+    //     const transform = d3.event.transform
+    //     this.$emit('zoom', {transform})
+    //     g.attr('transform', d3.event.transform)
+    //   }
     // },
-
+    updateChart(g) {
+      var newX = d3.event.transform.rescaleX(this.internaldata.axis_scalex);
+      var newY = d3.event.transform.rescaleY(this.internaldata.axis_scaley);
+      // update axes with these new boundaries
+      this.internaldata.xAxis.call(d3.axisTop(newX))
+      this.internaldata.yAxis.call(d3.axisLeft(newY))
+      this.internaldata.svg
+        .selectAll(".row")
+        .attr('transform', d3.event.transform);
+    },
     onData(griddata) {
       
       if (!griddata && !griddata.grid) {
@@ -114,40 +137,49 @@ export default {
         this.clean()
         return
       }
-      // griddata.grid.each(d => { d.id = i++ })
-      
-      // const size = this.getSize()
       griddata.startX=this.marginX
       griddata.startY=this.marginY
-      // griddata.endX=size.width-this.marginX
-      // griddata.endY=size.height-this.marginY
       this.internaldata.griddata= griddata
-      //比例尺
+      griddata.latticeWidth=this.latticeWidth
+      griddata.endX=griddata.startX+griddata.xcount*this.latticeWidth
+      griddata.latticeHeigth=this.latticeWidth / griddata.width * griddata.height //计算格子高度
+      griddata.endY=griddata.startY+griddata.ycount* griddata.latticeHeigth
+      //横轴比例尺
       this.internaldata.scalex = d3.scaleLinear()
       .domain([griddata.startposX, griddata.endposX])
-      .range([griddata.startX, griddata.startX+griddata.xcount*this.gridWidth]);
-
+      .range([griddata.startX, griddata.endX]);
       this.internaldata.scalew = d3.scaleLinear()
       .domain([0, griddata.width])
-      .range([0, this.gridWidth]);
-
-      const h = this.gridWidth / griddata.width * griddata.height //计算长高比例
-
-      //比例尺
+      .range([0, this.latticeWidth]);
+      //纵轴比例尺
       this.internaldata.scaley = d3.scaleLinear()
       .domain([griddata.startposY, griddata.endposY])
-      .range([griddata.startY, griddata.startY+griddata.ycount* h]);
-
+      .range([griddata.startY, griddata.endY]);
       this.internaldata.scaleh = d3.scaleLinear()
       .domain([0, griddata.height])
-      .range([0, h]);
-      
+      .range([0, griddata.latticeHeigth]);
       // console.log(griddata.startX,griddata.endX,griddata.startposX,griddata.endposX,this.internaldata.scalex(griddata.startposX))
       this.redraw()
     },
     redraw(){
-      const griddata = this.internaldata.griddata
+      let {griddata,clip,zoom,svg} = this.internaldata
       if (griddata) {
+        this.clean()
+        const size = this.getSize()
+        //坐标轴比例尺
+        const maxposWidth = (size.width-this.marginX)/(griddata.endX-griddata.startX)*(griddata.endposX-griddata.startposX)+griddata.startposX
+        this.internaldata.axis_scalex = d3.scaleLinear()
+        .domain([griddata.startposX, maxposWidth])
+        .range([griddata.startX, size.width]);
+        const maxposHeight = (size.height-this.marginY)/(griddata.endY-griddata.startY)*(griddata.endposY-griddata.startposY)+griddata.startposY
+        this.internaldata.axis_scaley = d3.scaleLinear()
+        .domain([griddata.startposY, maxposHeight])
+        .range([griddata.startY, size.height]);
+        clip.attr("width", size.width ).attr("height", size.height )
+        zoom.extent([[0, 0], [size.width, size.height]])
+        // svg.call(zoom).on('wheel', () => d3.event.preventDefault())
+
+
         return this.updateGraph(griddata)
       }
       return Promise.resolve('no graph')
@@ -155,19 +187,19 @@ export default {
     updateGraph (griddata) {
       // TODO: 动画效果
       return new Promise((resolve, reject) => {
-        this.clean()
-        let {scalex,scalew,scaley,scaleh,g} = this.internaldata
-        var xAxis = g.append("g")
+        
+        let {scalex,scalew,scaley,scaleh,g,svg,axis_scalex,axis_scaley} = this.internaldata
+        this.internaldata.xAxis = svg.append("g")
           .attr("class", "axis")
-          .style("font", "5px times")
+          .style("font", "15px times")
           .attr("transform", "translate(0," + griddata.startY + ")")
-          .call(d3.axisTop(scaley).ticks(griddata.ycount));
-        var yAxis = g.append("g")
+          .call(d3.axisTop(axis_scalex));
+        this.internaldata.yAxis = svg.append("g")
           .attr("class", "axis")
-          .style("font", "5px times")
-          .attr("transform", "translate(" + griddata.startX + ")",0)
-          .call(d3.axisLeft(scalex).ticks(griddata.xcount));
-        this.internaldata.row = this.internaldata.g.selectAll(".row")
+          .style("font", "15px times")
+          .attr("transform", "translate(" + griddata.startX + ",0)")
+          .call(d3.axisLeft(axis_scaley));
+        this.internaldata.row = this.internaldata.scatter.selectAll(".row")
         .data(griddata.grid)
         .enter()
         .append("g")
@@ -194,6 +226,7 @@ export default {
         	  .transition()
         	  .style("fill",function(d) { return d.attrs.initHead.color; });
         });
+        
         resolve('ok')
       });
     }

@@ -105,7 +105,7 @@
 
   </div>
     <div class="col-md-9 panel panel-default">
-      <D3grid ref="tree" class="tree" :zoomable="zoomable" :data="griddata" :gridWidth="gridWidth"></D3grid>
+      <D3grid ref="tree" class="tree" :zoomable="zoomable" :data="griddata" :latticeWidth="latticeWidth"></D3grid>
     </div>
   </div>
 </template>
@@ -128,7 +128,7 @@ export default {
       zoomable: true,
       isLoading: false,
       events: [],
-      gridWidth: 20,
+      latticeWidth: 20,
     }
   },
   components: {
@@ -203,7 +203,7 @@ export default {
 }
 
 .tree {
-  height: 1200px;
+  height: 1600px;
   width: 100%;
 }
 
