@@ -87,7 +87,10 @@ export default {
       this.onData(this.internaldata.griddata)
     },
     clean () {
-      this.internaldata.g.selectAll(".row").remove(); 
+      ['.row', '.axis'].forEach(selector => {
+        this.internaldata.g.selectAll(selector).remove()
+      })
+      // this.internaldata.g.selectAll(".row").remove(); 
     },
     zoomed (g) {
       return () => {
@@ -153,7 +156,17 @@ export default {
       // TODO: 动画效果
       return new Promise((resolve, reject) => {
         this.clean()
-        let {scalex,scalew,scaley,scaleh} = this.internaldata
+        let {scalex,scalew,scaley,scaleh,g} = this.internaldata
+        var xAxis = g.append("g")
+          .attr("class", "axis")
+          .style("font", "5px times")
+          .attr("transform", "translate(0," + griddata.startY + ")")
+          .call(d3.axisTop(scaley).ticks(griddata.ycount));
+        var yAxis = g.append("g")
+          .attr("class", "axis")
+          .style("font", "5px times")
+          .attr("transform", "translate(" + griddata.startX + ")",0)
+          .call(d3.axisLeft(scalex).ticks(griddata.xcount));
         this.internaldata.row = this.internaldata.g.selectAll(".row")
         .data(griddata.grid)
         .enter()

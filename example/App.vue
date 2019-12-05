@@ -128,7 +128,7 @@ export default {
       zoomable: true,
       isLoading: false,
       events: [],
-      gridWidth: 70,
+      gridWidth: 20,
     }
   },
   components: {
