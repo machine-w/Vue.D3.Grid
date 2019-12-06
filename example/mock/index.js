@@ -44,7 +44,9 @@ function oriGridDataRow(width,height,startx,starty,xcount,ycount){
         width: width,
         height: height,
         click: 0,
-        attrs:{initHead:{zone:1,values:[1.2,1.0,3],color:getRandomColor()}}
+        attrs:{initHead:{zone:1,values:[1.2,1.0,3],color:getRandomColor()},
+               initnormality:{zone:2,values:[1.2,1.0,3],color:getRandomColor()}
+              }
         });
 
         if(row > 0){
@@ -89,7 +91,9 @@ function oriGridData(width,height,startx,starty,xcount,ycount){
         width: width,
         height: height,
         click: 0,
-        attrs:{initHead:{zone:1,values:[1.2,1.0,3],color:getRandomColor()}}
+        attrs:{initHead:{zone:1,values:[1.2,1.0,3],color:getRandomColor()},
+               initnormality:{zone:2,values:[1.2,1.0,3],color:getRandomColor()}
+              }
         });
     
         // increment the x position

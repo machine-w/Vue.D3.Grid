@@ -121,6 +121,7 @@ export default {
     //   }
     // },
     updateChart(g) {
+      this.currentTransform = d3.event.transform
       var newX = d3.event.transform.rescaleX(this.internaldata.axis_scalex);
       var newY = d3.event.transform.rescaleY(this.internaldata.axis_scaley);
       // update axes with these new boundaries
@@ -178,6 +179,7 @@ export default {
         clip.attr("width", size.width ).attr("height", size.height )
         zoom.extent([[0, 0], [size.width, size.height]])
         // svg.call(zoom).on('wheel', () => d3.event.preventDefault())
+        
 
 
         return this.updateGraph(griddata)
@@ -226,7 +228,7 @@ export default {
         	  .transition()
         	  .style("fill",function(d) { return d.attrs.initHead.color; });
         });
-        
+        this.internaldata.scatter.call(this.internaldata.zoom.transform, this.currentTransform)
         resolve('ok')
       });
     }
