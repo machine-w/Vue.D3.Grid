@@ -1,5 +1,5 @@
-const ATTRS= () =>{return ['initHead','initnormality']} 
-export default {
-    ATTRS
+const MODES = ['viewdetail','rowselect', 'colselect','singleselect']
+export {
+    MODES
 }
   

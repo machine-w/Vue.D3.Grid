@@ -5,16 +5,12 @@
 <script>
 import resize from 'vue-resize-directive'
 import {compareString, anchorTodx, toPromise, findInParents} from './d3-utils'
-// import ATTRS from './attrs'
-// import MODES from './opermode/index'
+import {ATTRS} from './attrs'
+import {MODES} from './opermode/index'
 import * as d3 from 'd3'
-
 
 var i = 0
 var currentSelected = null
-
-const MODES = ['viewdetail','rowselect', 'colselect','singleselect']
-const ATTRS = ['initHead','initnormality']
 
 const props = {
   data: Object,
