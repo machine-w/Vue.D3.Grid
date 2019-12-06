@@ -3,60 +3,62 @@
     <div class="col-md-3">
 
       <div class="panel panel-default">
-        <div class="panel-heading">Props</div>
+        <div class="panel-heading">控制</div>
 
         <div class="panel-body">
             <div class="form-horizontal">
 
             <div class="form-group">
-              <label for="type" class="control-label col-sm-3">type</label>
+              <label for="type" class="control-label col-sm-3">查看属性</label>
                 <div  class="col-sm-9">
-                  <select id="type" class="form-control" v-model="type">
-                    <option>tree</option>
-                    <option>cluster</option>
+                  <select id="type" class="form-control" v-model="viewAttr">
+                    <option value="initHead">初始水头</option>
+                    <option value="initnormality">初始浓度</option>
                   </select>
                 </div>
             </div>
 
             <div class="form-group">
-              <label for="layout-type" class="control-label col-sm-3">layoutType</label>
+              <label for="layout-type" class="control-label col-sm-3">操作模式</label>
                 <div  class="col-sm-9">
-                  <select id="layout-type" class="form-control" v-model="layoutType">
-                    <option>euclidean</option>
-                    <option>circular</option>
+                  <select id="layout-type" class="form-control" v-model="operMode">
+                    <option value="viewdetail">查看信息</option>
+                    <option value="rowselect">行选择</option>
+                    <option value="colselect">列选择</option>
                   </select>       
               </div>
             </div> 
 
             <div class="form-group">
-              <label for="margin-x" class="control-label col-sm-3">marginx</label>
+              <label for="margin-x" class="control-label col-sm-3">左边框</label>
               <div class="col-sm-7">
-                <input id="margin-x" class="form-control" type="range" min="-200" max="200" v-model.number="Marginx">
+                <input id="margin-x" class="form-control" type="range" min="10" max="100" v-model.number="Marginx">
               </div> 
                 <div class="col-sm-2">
                   <p>{{Marginx}}px</p>       
               </div> 
-            </div>        
+            </div>  
+            <div class="form-group">
+              <label for="margin-x" class="control-label col-sm-3">上边框</label>
+              <div class="col-sm-7">
+                <input id="margin-x" class="form-control" type="range" min="10" max="100" v-model.number="Marginy">
+              </div> 
+                <div class="col-sm-2">
+                  <p>{{Marginy}}px</p>       
+              </div> 
+            </div>  
+           
 
             <div class="form-group">
-              <label for="margin-y" class="control-label col-sm-3">marginy</label>
+              <label for="margin-y" class="control-label col-sm-3">格子宽度</label>
               <div class="col-sm-7">
-                <input id="margin-y" class="form-control" type="range" min="-200" max="200" v-model.number="Marginy">
+                <input id="margin-y" class="form-control" type="range" min="10" max="100" v-model.number="latticeWidth">
               </div>
               <div class="col-sm-2">
-                <p>{{Marginy}}px</p>       
+                <p>{{latticeWidth}}px</p>       
               </div> 
             </div>        
 
-            <div class="form-group">
-              <label for="velocity" class="control-label col-sm-3">Duration</label>
-              <div class="col-sm-7">
-                <input id="velocity" class="form-control" type="range" min="0" max="3000" v-model.number="duration">
-              </div>
-              <div class="col-sm-2">
-                <p>{{duration}}ms</p>       
-              </div>
-            </div>  
 
             <div class="form-group">
               <span v-if="currentNode">Current Node: {{currentNode.data.text}}</span>
@@ -94,7 +96,7 @@
 
 
     <div class="panel panel-default">
-        <div class="panel-heading">Events</div>
+        <div class="panel-heading">事件</div>
 
         <div class="panel-body log">
           <div v-for="e in events" :key="e.eventName">
@@ -105,7 +107,7 @@
 
   </div>
     <div class="col-md-9 panel panel-default">
-      <D3grid ref="tree" class="tree" :zoomable="zoomable" :data="griddata" :latticeWidth="latticeWidth"></D3grid>
+      <D3grid ref="tree" class="tree" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"></D3grid>
     </div>
   </div>
 </template>
@@ -118,9 +120,8 @@ export default {
   data () {
     return {
       griddata:{},
-      type: 'tree',
-      layoutType: 'euclidean',
-      duration: 750,
+      viewAttr: 'initHead',
+      operMode: 'viewdetail',
       Marginx: 30,
       Marginy: 30,
       nodeText: 'text',
@@ -128,7 +129,7 @@ export default {
       zoomable: true,
       isLoading: false,
       events: [],
-      latticeWidth: 20,
+      latticeWidth: 10,
     }
   },
   components: {

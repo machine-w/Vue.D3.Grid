@@ -5,12 +5,16 @@
 <script>
 import resize from 'vue-resize-directive'
 import {compareString, anchorTodx, toPromise, findInParents} from './d3-utils'
-
+// import ATTRS from './attrs'
+// import MODES from './opermode/index'
 import * as d3 from 'd3'
 
 
 var i = 0
 var currentSelected = null
+
+const MODES = ['viewdetail','rowselect', 'colselect','singleselect']
+const ATTRS = ['initHead','initnormality']
 
 const props = {
   data: Object,
@@ -26,10 +30,25 @@ const props = {
     type: Number,
     default: 40
   },
-  zoomable: {
-    type: Boolean,
-    default: false
-  }
+  viewAttr: {
+    type: String,
+    default: 'initHead',
+    validator (value) {
+      return ATTRS.indexOf(value) !== -1
+    }
+  },
+  operMode: {
+    type: String,
+    default: 'viewdetail',
+    validator (value) {
+      return MODES.indexOf(value) !== -1
+    }
+  },
+
+  // zoomable: {
+  //   type: Boolean,
+  //   default: false
+  // }
 }
 
 const directives = {
@@ -43,10 +62,7 @@ export default {
   data () {
     return {
       currentTransform: null,
-      maxTextLenght: {
-        first: 0,
-        last: 0
-      }
+      currentAttr:null,
     }
   },
 
@@ -89,6 +105,7 @@ export default {
       clip,
       zoom
     }
+    this.currentAttr=this.viewAttr
     
     this.data && this.onData(this.data)
   },
@@ -176,12 +193,9 @@ export default {
         this.internaldata.axis_scaley = d3.scaleLinear()
         .domain([griddata.startposY, maxposHeight])
         .range([griddata.startY, size.height]);
-        clip.attr("width", size.width ).attr("height", size.height )
+        clip.attr("width", size.width ).attr("height", size.height ).attr("x", this.marginX).attr("y", this.marginY);
         zoom.extent([[0, 0], [size.width, size.height]])
-        // svg.call(zoom).on('wheel', () => d3.event.preventDefault())
-        
-
-
+        // svg.call(zoom).on('wheel', () => d3.event.preventDefault()) 
         return this.updateGraph(griddata)
       }
       return Promise.resolve('no graph')
@@ -189,7 +203,7 @@ export default {
     updateGraph (griddata) {
       // TODO: 动画效果
       return new Promise((resolve, reject) => {
-        
+        const curAttr =this.currentAttr
         let {scalex,scalew,scaley,scaleh,g,svg,axis_scalex,axis_scaley} = this.internaldata
         this.internaldata.xAxis = svg.append("g")
           .attr("class", "axis")
@@ -206,7 +220,7 @@ export default {
         .enter()
         .append("g")
         .attr("class", "row");
-
+        console.log(curAttr)
         this.internaldata.cells = this.internaldata.row.selectAll(".square")
         .data(function(d) {return d;})
         .enter()
@@ -218,7 +232,7 @@ export default {
         .attr("yindex", function(d) { return d.yindex; })
         .attr("width", function(d) { return scalew(d.width); })
         .attr("height", function(d) { return scaleh(d.height); })
-        .style("fill", function(d) { return d.attrs.initHead.color; })
+        .style("fill", function(d) { return d.attrs[curAttr].color; })
         .style("stroke", "#222")
         .on('mouseover', function(d) {
           d3.select(this).style("fill","#4682B4");
@@ -244,6 +258,19 @@ export default {
   watch: {
     data (current, old) {
       this.onData(current)
+    },
+    latticeWidth (current, old) {
+      this.onData(this.data)
+    },
+    marginX (current, old) {
+      this.onData(this.data)
+    },
+    marginY (current, old) {
+      this.onData(this.data)
+    },
+    viewAttr (current, old) {
+      this.currentAttr=current
+      this.redraw()
     },
     // zoomable (newValue) {
     //   if (newValue) {
