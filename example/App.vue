@@ -62,7 +62,7 @@
 
             <div class="form-group">
               <span v-if="currentNode">Current Node: {{currentNode.data.text}}</span>
-              <span v-else>No Node selected.</span>
+              <span v-else>无选择节点</span>
                <i v-if="isLoading" class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
             </div>  
 
@@ -96,7 +96,7 @@
 
 
     <div class="panel panel-default">
-        <div class="panel-heading">事件</div>
+        <div class="panel-heading">属性</div>
 
         <div class="panel-body log">
           <div v-for="e in events" :key="e.eventName">
