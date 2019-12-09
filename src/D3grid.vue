@@ -6,11 +6,18 @@
 import resize from 'vue-resize-directive'
 import {compareString, anchorTodx, toPromise, findInParents} from './d3-utils'
 import {ATTRS} from './attrs'
-import {MODES} from './opermode/index'
+import {MODES} from './opermode/'
+import single_select from './opermode/select-single'
+import row_select from './opermode/select-row'
 import * as d3 from 'd3'
 
 var i = 0
 var currentSelected = null
+
+const oper_mode = {
+  single_select,
+  row_select
+}
 
 const props = {
   data: Object,
@@ -35,7 +42,7 @@ const props = {
   },
   operMode: {
     type: String,
-    default: 'viewdetail',
+    default: 'single_select',
     validator (value) {
       return MODES.indexOf(value) !== -1
     }
@@ -107,6 +114,7 @@ export default {
   },
 
   methods: {
+    
     getSize () {
       var width = this.$el.clientWidth
       var height = this.$el.clientHeight
@@ -200,6 +208,7 @@ export default {
       // TODO: 动画效果
       return new Promise((resolve, reject) => {
         const curAttr =this.currentAttr
+        
         let {scalex,scalew,scaley,scaleh,g,svg,axis_scalex,axis_scaley} = this.internaldata
         this.internaldata.xAxis = svg.append("g")
           .attr("class", "axis")
@@ -229,18 +238,25 @@ export default {
         .attr("width", function(d) { return scalew(d.width); })
         .attr("height", function(d) { return scaleh(d.height); })
         .style("fill", function(d) { return d.attrs[curAttr].color; })
-        .style("stroke", "#222")
-        .on('mouseover', function(d) {
-          d3.select(this).style("fill","#4682B4");
-        })
-        .on("mouseout",function(d,i){
-        	d3.select(this)
-        	  .transition()
-        	  .style("fill",function(d) { return d.attrs.initHead.color; });
-        });
+        .style("stroke", "#222");
+
+        //更新操作
+        this.updateOper()
+        
         this.internaldata.scatter.call(this.internaldata.zoom.transform, this.currentTransform)
         resolve('ok')
       });
+    },
+    updateOper(){
+      let that =this
+      let {row,cells,griddata} = this.internaldata
+      cells.on('mouseover', function(d,i) {
+          that.getOperMode.MouseOver(d3.select(this),d,i)
+          // d3.select(this).style("fill","#4682B4");
+        })
+        .on("mouseout",function(d,i){
+        	that.getOperMode.MouseOut(d3.select(this),d,i,that)
+        });
     },
     updateColor(curAttr){
       let {row,cells,griddata} = this.internaldata
@@ -253,7 +269,10 @@ export default {
   computed: {
     margin () {
       return {x: this.marginX, y: this.marginY}
-    }
+    },
+    getOperMode () {
+      return oper_mode[this.operMode]
+    },
   },
 
   watch: {

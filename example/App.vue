@@ -22,9 +22,9 @@
               <label for="layout-type" class="control-label col-sm-3">操作模式</label>
                 <div  class="col-sm-9">
                   <select id="layout-type" class="form-control" v-model="operMode">
-                    <option value="viewdetail">查看信息</option>
-                    <option value="rowselect">行选择</option>
-                    <option value="colselect">列选择</option>
+                    <option value="single_select">单点选择</option>
+                    <option value="row_select">行选择</option>
+                    <option value="col_select">列选择</option>
                   </select>       
               </div>
             </div> 
@@ -121,7 +121,7 @@ export default {
     return {
       griddata:{},
       viewAttr: 'initHead',
-      operMode: 'viewdetail',
+      operMode: 'single_select',
       Marginx: 30,
       Marginy: 30,
       nodeText: 'text',
