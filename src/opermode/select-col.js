@@ -3,9 +3,9 @@ import * as d3 from 'd3'
 export default {
     MouseOver (target,d, i,v) {
 
-      let curIndex = target.attr("xindex");
+      let curIndex = target.attr("yindex");
       v.internaldata.cells.filter(function(d1,i1){
-        if(d1.xindex == curIndex){
+        if(d1.yindex == curIndex){
            return true
         }
         else{
@@ -16,10 +16,10 @@ export default {
       .style("fill",OverColor)
     },
     MouseOut (target,d, i,v) {
-      let curIndex = target.attr("xindex");
+      let curIndex = target.attr("yindex");
       v.internaldata.cells
       .filter(function(d2,i1){
-        if(d2.xindex == curIndex){
+        if(d2.yindex == curIndex){
           return true;
         }
         else{

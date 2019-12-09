@@ -9,6 +9,7 @@ import {ATTRS} from './attrs'
 import {MODES} from './opermode/'
 import single_select from './opermode/select-single'
 import row_select from './opermode/select-row'
+import col_select from './opermode/select-col'
 import * as d3 from 'd3'
 
 var i = 0
@@ -16,7 +17,8 @@ var currentSelected = null
 
 const oper_mode = {
   single_select,
-  row_select
+  row_select,
+  col_select
 }
 
 const props = {
@@ -66,6 +68,7 @@ export default {
     return {
       currentTransform: null,
       currentAttr:null,
+      currentOperMode:null
     }
   },
 
@@ -251,7 +254,7 @@ export default {
       let that =this
       let {row,cells,griddata} = this.internaldata
       cells.on('mouseover', function(d,i) {
-          that.getOperMode.MouseOver(d3.select(this),d,i)
+          that.getOperMode.MouseOver(d3.select(this),d,i,that)
           // d3.select(this).style("fill","#4682B4");
         })
         .on("mouseout",function(d,i){
@@ -291,6 +294,11 @@ export default {
     viewAttr (current, old) {
       this.currentAttr=current
       this.updateColor(current)
+      // this.redraw()
+    },
+    operMode (current, old) {
+      this.currentOperMode=current
+      this.updateOper()
       // this.redraw()
     },
     // zoomable (newValue) {

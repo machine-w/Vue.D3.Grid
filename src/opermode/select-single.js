@@ -7,4 +7,4 @@ export default {
     MouseOut (target,d, i,v) {
         target.transition().style("fill",d.attrs[v.currentAttr].color);
     }
-  }
+}

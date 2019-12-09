@@ -107,7 +107,7 @@
 
   </div>
     <div class="col-md-9 panel panel-default">
-      <D3grid ref="tree" class="tree" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"></D3grid>
+      <D3grid ref="tree" class="tree" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"></D3grid>
     </div>
   </div>
 </template>
