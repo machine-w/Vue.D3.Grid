@@ -216,7 +216,7 @@ export default {
         .enter()
         .append("g")
         .attr("class", "row");
-        console.log(curAttr)
+        // console.log(curAttr)
         this.internaldata.cells = this.internaldata.row.selectAll(".square")
         .data(function(d) {return d;})
         .enter()
@@ -241,6 +241,11 @@ export default {
         this.internaldata.scatter.call(this.internaldata.zoom.transform, this.currentTransform)
         resolve('ok')
       });
+    },
+    updateColor(curAttr){
+      let {row,cells,griddata} = this.internaldata
+      cells.data(function(d) {return d;}).style("fill", function(d) { return d.attrs[curAttr].color; })
+
     }
 
   },
@@ -266,7 +271,8 @@ export default {
     },
     viewAttr (current, old) {
       this.currentAttr=current
-      this.redraw()
+      this.updateColor(current)
+      // this.redraw()
     },
     // zoomable (newValue) {
     //   if (newValue) {
