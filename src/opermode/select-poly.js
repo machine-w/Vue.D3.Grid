@@ -1,7 +1,7 @@
 import { OverColor } from ".";
 export default {
     callOper (v,d3) {
-        
+        let {scalex,scalew,scaley,scaleh,scatter} = v.internaldata
         // let p_brush = d3.polybrush()
         //             .x(d3.scaleLinear().range([v.marginX, size.width]))
         //             .y(d3.scaleLinear().range([v.marginY, size.height]))
@@ -26,16 +26,16 @@ export default {
 		})
 		.on("brush", function() {
 			// set the 'selected' class for the circle
-			v.internaldata.scatter.selectAll(".square").filter(function(d,i) {
+			scatter.selectAll(".square").filter(function(d,i) {
 				// console.log(d.x,d.y);
-				if (brush.isWithinExtent(d.x+d.width/2, d.y + d.height/2)) {
+				if (brush.isWithinExtent(scalex(d.x)+scalew(d.width)/2, scaley(d.y) + scaleh(d.height)/2)) {
 					return true;
 				} else {
 					return false;
 				}
 			}).style("fill",OverColor).attr("class", "selected")
         });
-        v.internaldata.scatter.append("g")
+        scatter.append("g")
             .attr("class", "brush")
             .call(brush);
     }
