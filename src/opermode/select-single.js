@@ -9,6 +9,6 @@ export default {
     },
     Click (target,d, i,v) {
         // console.log(d)
-        v.$emit('clicked', {element: d,oper:'single_select'})
+        v.$emit('clicked', {elements: [d],oper:'single_select'})
     }
 }

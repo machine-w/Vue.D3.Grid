@@ -61,24 +61,24 @@
 
 
             <div class="form-group">
-              <span v-if="currentNode">当前节点： {{currentNode.xindex + ":"+ currentNode.yindex}}</span>
+              <span v-if="currentLattices">当前节点数量： {{currentLattices.length}}</span>
               <span v-else>无选择节点</span>
                <i v-if="isLoading" class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
             </div>  
 
-            <!-- <button type="button" :disabled="!currentNode" class="btn btn-primary" @click="expandAll" data-toggle="tooltip" data-placement="top" title="Expand All from current">
+            <!-- <button type="button" :disabled="!currentLattices" class="btn btn-primary" @click="expandAll" data-toggle="tooltip" data-placement="top" title="Expand All from current">
             <i class="fa fa-expand" aria-hidden="true"></i>          
             </button>
 
-            <button type="button" :disabled="!currentNode" class="btn btn-secondary" @click="collapseAll" data-toggle="tooltip" data-placement="top" title="Collapse All from current">
+            <button type="button" :disabled="!currentLattices" class="btn btn-secondary" @click="collapseAll" data-toggle="tooltip" data-placement="top" title="Collapse All from current">
             <i class="fa fa-compress" aria-hidden="true"></i>            
             </button>
 
-            <button type="button" :disabled="!currentNode" class="btn btn-success" @click="showOnlyChildren" data-toggle="tooltip" data-placement="top" title="Show Only Children from current">
+            <button type="button" :disabled="!currentLattices" class="btn btn-success" @click="showOnlyChildren" data-toggle="tooltip" data-placement="top" title="Show Only Children from current">
             <i class="fa fa-search-plus" aria-hidden="true"></i>       
             </button>
 
-            <button type="button" :disabled="!currentNode" class="btn btn-warning" @click="show" data-toggle="tooltip" data-placement="top" title="Show current">
+            <button type="button" :disabled="!currentLattices" class="btn btn-warning" @click="show" data-toggle="tooltip" data-placement="top" title="Show current">
             <i class="fa fa-binoculars" aria-hidden="true"></i>           
             </button> -->
 
@@ -99,8 +99,8 @@
         <div class="panel-heading">属性</div>
 
         <div class="panel-body log">
-          <div v-for="e in events" :key="e.eventName">
-            <p><b>事件:</b> {{e.eventName}} <b>当前操作:</b>{{e.oper}}</p>
+          <div v-for="e in events" :key="e.oper">
+            <p><b>数据:</b> {{e.data}} <b>当前操作:</b>{{e.oper}}</p>
           </div>
         </div>
     </div>
@@ -126,7 +126,7 @@ export default {
       Marginx: 30,
       Marginy: 30,
       nodeText: 'text',
-      currentNode: null,
+      currentLattices: null,
       zoomable: true,
       isLoading: false,
       events: [],
@@ -138,9 +138,9 @@ export default {
   },
   methods: {
     do (action) {
-      if (this.currentNode) {
+      if (this.currentLattices) {
         this.isLoading = true
-        this.$refs['tree'][action](this.currentNode).then(() => { this.isLoading = false })
+        this.$refs['grid'][action](this.currentLattices).then(() => { this.isLoading = false })
       }
     },
 
@@ -158,12 +158,12 @@ export default {
     // },
     onClick (evt) {
       // console.log(evt)
-      this.currentNode = evt.element
-      this.onEvent('onClick', evt)
+      this.currentLattices = evt.elements
+      this.onEvent(evt)
     },
-    onEvent (eventName, data) {
-      // this.events.push({eventName, oper: data.oper})
-      console.log({eventName, data: data.oper})
+    onEvent (data) {
+      this.events.push({data:data.elements, oper: data.oper})
+      // console.log({eventName, data: data.oper})
     },
     getAllOrders() {
       axios.get("/api/getGridDataLayer").then(res => {
@@ -201,7 +201,7 @@ export default {
 }
 
 .log  {
-  height: 500px;
+  height: 1200px;
   overflow-x: auto;
   overflow-y: auto;
   overflow: auto;

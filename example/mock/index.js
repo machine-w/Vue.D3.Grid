@@ -113,4 +113,4 @@ function oriGridData(width,height,startx,starty,xcount,ycount){
 
 Mock.mock('/api/getGridDataRow','get',oriGridDataRow(100,100,1234000,100343400,30,100));
 Mock.mock('/api/getGridDataColum','get',oriGridDataRow(300,700,50,50,10,100));
-Mock.mock('/api/getGridDataLayer','get',oriGridData(100,200,0,0,100,100));
+Mock.mock('/api/getGridDataLayer','get',oriGridData(100,100,0,0,100,100));

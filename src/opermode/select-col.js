@@ -31,6 +31,18 @@ export default {
         d3.select(this).style("fill",d.attrs['initHead'].color)})
     },
     Click (target,d, i,v) {
-        v.$emit('clicked', {element: d, data: d.data})
+      let ds=[]
+      let curIndex = target.attr("yindex");
+      v.internaldata.cells
+      .filter(function(d2,i2){
+        if(d2.yindex == curIndex){
+          return true;
+        }
+        else{
+          return false;
+        }
+      })
+      .each(function(d, i) {ds.push(d)})
+        v.$emit('clicked', {elements: ds, oper:'row_select',select_row:curIndex})
     }
 }
