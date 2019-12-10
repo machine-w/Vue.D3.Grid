@@ -3,6 +3,8 @@
   </div>
 </template>
 <script>
+import * as d3 from 'd3'
+import './util/polybrush'
 import resize from 'vue-resize-directive'
 import {compareString, anchorTodx, toPromise, findInParents} from './d3-utils'
 import {ATTRS} from './attrs'
@@ -10,7 +12,9 @@ import {MODES} from './opermode/'
 import single_select from './opermode/select-single'
 import row_select from './opermode/select-row'
 import col_select from './opermode/select-col'
-import * as d3 from 'd3'
+import poly_select from './opermode/select-poly'
+
+
 
 var i = 0
 var currentSelected = null
@@ -18,7 +22,8 @@ var currentSelected = null
 const oper_mode = {
   single_select,
   row_select,
-  col_select
+  col_select,
+  poly_select
 }
 
 const props = {
@@ -153,6 +158,9 @@ export default {
       this.internaldata.yAxis.call(d3.axisLeft(newY))
       this.internaldata.svg
         .selectAll(".row")
+        .attr('transform', d3.event.transform);
+      this.internaldata.svg
+        .selectAll(".brush")
         .attr('transform', d3.event.transform);
     },
     onData(griddata) {
@@ -345,5 +353,28 @@ export default {
   stroke: #555;
   stroke-opacity: 0.4;
   stroke-width: 1.5px;
+}
+.brush .extent {
+    stroke: #555;
+    stroke-width: 3.5px;
+    fill: #fff;
+    fill-opacity: 0.3;
+}
+.brush .selection {
+    stroke: #555;
+    stroke-width: 1.5px;
+    fill: #000;
+    fill-opacity: 0.3;
+}
+.square{
+    fill: #fff;
+    stroke: #222;
+    /* stroke-opacity: 0.5; */
+}
+.selected {
+    fill: steelblue;
+    /* fill-opacity: 0.4; */
+    stroke: #111;
+    /* stroke-opacity: 0.5; */
 }
 </style>

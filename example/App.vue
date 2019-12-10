@@ -25,6 +25,7 @@
                     <option value="single_select">单点选择</option>
                     <option value="row_select">行选择</option>
                     <option value="col_select">列选择</option>
+                    <option value="poly_select">多边形选择</option>
                   </select>       
               </div>
             </div> 
