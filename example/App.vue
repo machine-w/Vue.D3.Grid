@@ -61,12 +61,12 @@
 
 
             <div class="form-group">
-              <span v-if="currentNode">Current Node: {{currentNode.data.text}}</span>
+              <span v-if="currentNode">当前节点： {{currentNode.xindex + ":"+ currentNode.yindex}}</span>
               <span v-else>无选择节点</span>
                <i v-if="isLoading" class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
             </div>  
 
-            <button type="button" :disabled="!currentNode" class="btn btn-primary" @click="expandAll" data-toggle="tooltip" data-placement="top" title="Expand All from current">
+            <!-- <button type="button" :disabled="!currentNode" class="btn btn-primary" @click="expandAll" data-toggle="tooltip" data-placement="top" title="Expand All from current">
             <i class="fa fa-expand" aria-hidden="true"></i>          
             </button>
 
@@ -80,13 +80,13 @@
 
             <button type="button" :disabled="!currentNode" class="btn btn-warning" @click="show" data-toggle="tooltip" data-placement="top" title="Show current">
             <i class="fa fa-binoculars" aria-hidden="true"></i>           
+            </button> -->
+
+            <button type="button"  class="btn btn-default" @click="getAllOrdersRow" data-toggle="tooltip" data-placement="top" title="freshData">
+            <i class="fa fa-arrows" aria-hidden="true"></i>           
             </button>
 
-            <button type="button"  class="btn btn-warning" @click="getAllOrdersRow" data-toggle="tooltip" data-placement="top" title="freshData">
-            <i class="fa fa-arrows-alt" aria-hidden="true"></i>           
-            </button>
-
-            <button type="button" class="btn btn-warning" @click="getAllOrders" data-toggle="tooltip" data-placement="top" title="Reset Zoom">
+            <button type="button" class="btn btn-default" @click="getAllOrders" data-toggle="tooltip" data-placement="top" title="Reset Zoom">
             <i class="fa fa-arrows-alt" aria-hidden="true"></i>                             
             </button>
 
@@ -100,14 +100,15 @@
 
         <div class="panel-body log">
           <div v-for="e in events" :key="e.eventName">
-            <p><b>Name:</b> {{e.eventName}} <b>Data:</b>{{e.data.text}}</p>
+            <p><b>事件:</b> {{e.eventName}} <b>当前操作:</b>{{e.oper}}</p>
           </div>
         </div>
     </div>
 
   </div>
     <div class="col-md-9 panel panel-default">
-      <D3grid ref="tree" class="tree" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"></D3grid>
+      <D3grid ref="grid" class="grid" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
+       @clicked="onClick" ></D3grid>
     </div>
   </div>
 </template>
@@ -143,35 +144,26 @@ export default {
       }
     },
 
-    expandAll () {
-      this.do('expandAll')
-    },
-    collapseAll () {
-      this.do('collapseAll')
-    },
-    showOnlyChildren () {
-      this.do('showOnlyChildren')
-    },
-    show () {
-      this.do('show')
-    },
+    // expandAll () {
+    //   this.do('expandAll')
+    // },
+    // collapseAll () {
+    //   this.do('collapseAll')
+    // },
+    // showOnlyChildren () {
+    //   this.do('showOnlyChildren')
+    // },
+    // show () {
+    //   this.do('show')
+    // },
     onClick (evt) {
+      // console.log(evt)
       this.currentNode = evt.element
       this.onEvent('onClick', evt)
     },
-    onExpand (evt) {
-      this.onEvent('onExpand', evt)
-    },
-    onRetract (evt) {
-      this.onEvent('onRetract', evt)
-    },
     onEvent (eventName, data) {
-      this.events.push({eventName, data: data.data})
-      // console.log({eventName, data: data})
-    },
-    resetZoom () {
-      this.isLoading = true
-      this.$refs['tree'].resetZoom().then(() => { this.isLoading = false })
+      // this.events.push({eventName, oper: data.oper})
+      console.log({eventName, data: data.oper})
     },
     getAllOrders() {
       axios.get("/api/getGridDataLayer").then(res => {
@@ -203,7 +195,7 @@ export default {
   margin-top: 20px;
 }
 
-.tree {
+.grid {
   height: 1600px;
   width: 100%;
 }

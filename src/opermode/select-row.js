@@ -29,5 +29,8 @@ export default {
       .transition()
       .each(function(d, i) {
         d3.select(this).style("fill",d.attrs['initHead'].color)})
+    },
+    Click (target,d, i,v) {
+        v.$emit('clicked', {element: d, data: d.data})
     }
 }

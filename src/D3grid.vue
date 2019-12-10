@@ -255,10 +255,12 @@ export default {
       let {row,cells,griddata} = this.internaldata
       cells.on('mouseover', function(d,i) {
           that.getOperMode.MouseOver(d3.select(this),d,i,that)
-          // d3.select(this).style("fill","#4682B4");
         })
         .on("mouseout",function(d,i){
         	that.getOperMode.MouseOut(d3.select(this),d,i,that)
+        })
+        .on("click",function(d,i){
+          that.getOperMode.Click(d3.select(this),d,i,that)
         });
     },
     updateColor(curAttr){
