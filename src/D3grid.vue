@@ -104,7 +104,7 @@ export default {
       .extent([[0, 0], [size.width, size.height]])
       .on("zoom", this.updateChart);
 
-    svg.call(zoom).on('wheel', () => d3.event.preventDefault())
+    svg.call(zoom).on('wheel', () => d3.event.preventDefault()).on("dblclick.zoom", () => {})
     this.internaldata = {
       svg,
       scatter,
@@ -251,17 +251,18 @@ export default {
       });
     },
     updateOper(){
-      let that =this
-      let {row,cells,griddata} = this.internaldata
-      cells.on('mouseover', function(d,i) {
-          that.getOperMode.MouseOver(d3.select(this),d,i,that)
-        })
-        .on("mouseout",function(d,i){
-        	that.getOperMode.MouseOut(d3.select(this),d,i,that)
-        })
-        .on("click",function(d,i){
-          that.getOperMode.Click(d3.select(this),d,i,that)
-        });
+      // let that =this
+      // let {row,cells,griddata} = this.internaldata
+      // cells.on('mouseover', function(d,i) {
+      //     that.getOperMode.MouseOver(d3.select(this),d,i,that)
+      //   })
+      //   .on("mouseout",function(d,i){
+      //   	that.getOperMode.MouseOut(d3.select(this),d,i,that)
+      //   })
+      //   .on("click",function(d,i){
+      //     that.getOperMode.Click(d3.select(this),d,i,that)
+      //   });
+        this.getOperMode.callOper(this,d3)
     },
     updateColor(curAttr){
       let {row,cells,griddata} = this.internaldata
