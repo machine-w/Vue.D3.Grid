@@ -1,7 +1,7 @@
 import { OverColor } from ".";
 export default {
     callOper (v,d3) {
-        let {scatter} = v.internaldata
+        let {scatter,brusher} = v.internaldata
         // let p_brush = d3.polybrush()
         //             .x(d3.scaleLinear().range([v.marginX, size.width]))
         //             .y(d3.scaleLinear().range([v.marginY, size.height]))
@@ -19,9 +19,10 @@ export default {
         // .call(p_brush);
         const size = v.getSize()
         var brush = d3.polybrush()
-        .x(d3.scaleLinear().range([v.marginX, size.width]))
-        .y(d3.scaleLinear().range([v.marginY, size.height]))
+        .x(d3.scaleLinear().range([v.marginX, v.data.endX]))
+        .y(d3.scaleLinear().range([v.marginY, v.data.endY]))
 		.on("start", function() {
+            
 			// v.internaldata.scatter.selectAll(".selected").classed("selected", false);
 		})
 		.on("brush", function() {
@@ -33,10 +34,9 @@ export default {
 				} else {
 					return false;
 				}
-			}).style("fill",OverColor).attr("class", "selected")
+			}).style("fill",OverColor)
         });
-        scatter.append("g")
-            .attr("class", "brush")
-            .call(brush);
+        
+        brusher.call(brush)
     }
 }

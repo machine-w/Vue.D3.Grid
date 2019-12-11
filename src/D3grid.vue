@@ -103,6 +103,8 @@ export default {
         .attr("y", this.marginY);
     let scatter = svg.append('g')
         .attr("clip-path", "url(#clip)")
+
+    let brusher=svg.append("g").attr("class", "brush")//.x(d3.scaleLinear().range([0, 0])).y(d3.scaleLinear().range([0, 0]))
         // .attr("class", "clip")
     var zoom = d3.zoom()
       .scaleExtent([.1, 100])  // This control how much you can unzoom (x0.5) and zoom (x20)
@@ -114,7 +116,8 @@ export default {
       svg,
       scatter,
       clip,
-      zoom
+      zoom,
+      brusher
     }
     this.currentAttr=this.viewAttr
     
@@ -268,22 +271,14 @@ export default {
       });
     },
     updateOper(){
-      // let that =this
-      // let {row,cells,griddata} = this.internaldata
-      // cells.on('mouseover', function(d,i) {
-      //     that.getOperMode.MouseOver(d3.select(this),d,i,that)
-      //   })
-      //   .on("mouseout",function(d,i){
-      //   	that.getOperMode.MouseOut(d3.select(this),d,i,that)
-      //   })
-      //   .on("click",function(d,i){
-      //     that.getOperMode.Click(d3.select(this),d,i,that)
-      //   });
+        this.internaldata.brusher.selectAll('*').remove()//.attr("width", "0").attr("height", "0");
+        this.updateColor()
         this.getOperMode.callOper(this,d3)
     },
-    updateColor(curAttr){
+    updateColor(){
+      let that = this
       let {row,cells,griddata} = this.internaldata
-      cells.data(function(d) {return d;}).style("fill", function(d) { return d.attrs[curAttr].color; })
+      cells.data(function(d) {return d}).style("fill", function(d) { return d.attrs[that.currentAttr].color })
 
     }
 
@@ -313,7 +308,7 @@ export default {
     },
     viewAttr (current, old) {
       this.currentAttr=current
-      this.updateColor(current)
+      this.updateColor()
       // this.redraw()
     },
     operMode (current, old) {
