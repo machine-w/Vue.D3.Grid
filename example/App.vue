@@ -90,6 +90,9 @@
             <button type="button" class="btn btn-default" @click="getAllOrders" data-toggle="tooltip" data-placement="top" title="Reset Zoom">
             <i class="fa fa-arrows-alt" aria-hidden="true"></i>                             
             </button>
+            <button type="button" class="btn btn-warning" @click="()=>{this.events=[]}" data-toggle="tooltip" data-placement="top" title="clear events">
+            <i class="fa fa-trash" aria-hidden="true"></i>  删除记录                          
+            </button>
 
         </div> 
       </div>     
@@ -97,8 +100,8 @@
 
 
     <div class="panel panel-default">
-        <div class="panel-heading">属性</div>
-
+        <div class="panel-heading">当前节点</div>
+        
         <div class="panel-body log">
           <div v-for="e in events" :key="e.oper">
             <p><b>数据:</b> {{e.data}} <b>当前操作:</b>{{e.oper}}</p>

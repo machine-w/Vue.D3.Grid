@@ -165,6 +165,8 @@ export default {
       this.internaldata.svg
         .selectAll(".brush")
         .attr('transform', d3.event.transform);
+      this.internaldata.svg
+        .select(".brush").selectAll('.extent').style("stroke-width",2.5/d3.event.transform.k);
     },
     onData(griddata) {
       
@@ -277,7 +279,8 @@ export default {
     },
     updateColor(){
       let that = this
-      let {row,cells,griddata} = this.internaldata
+      let {row,cells,griddata,scatter} = this.internaldata
+      scatter.selectAll(".selected").classed("selected", false)
       cells.data(function(d) {return d}).style("fill", function(d) { return d.attrs[that.currentAttr].color })
 
     }
@@ -359,8 +362,8 @@ export default {
   stroke-width: 1.5px;
 }
 .brush .extent {
-    stroke: #555;
-    stroke-width: 3.5px;
+    stroke: #955;
+    stroke-width: 2.5px;
     fill: #fff;
     fill-opacity: 0.3;
 }
@@ -376,7 +379,7 @@ export default {
     /* stroke-opacity: 0.5; */
 }
 .selected {
-    fill: steelblue;
+    fill: steelblue !important;
     /* fill-opacity: 0.4; */
     stroke: #111;
     /* stroke-opacity: 0.5; */
