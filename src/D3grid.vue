@@ -191,6 +191,15 @@ export default {
       this.internaldata.scaleh = d3.scaleLinear()
       .domain([0, griddata.height])
       .range([0, griddata.latticeHeigth]);
+      //增加虚拟空间坐标和大小属性
+      for (let row of griddata.grid) {
+        for (let cell of row) {
+          cell.v_width = this.internaldata.scalew(cell.width)
+          cell.v_height = this.internaldata.scaleh(cell.height)
+          cell.v_x = this.internaldata.scalex(cell.x)
+          cell.v_y = this.internaldata.scaley(cell.y)
+        }
+      }
       // console.log(griddata.startX,griddata.endX,griddata.startposX,griddata.endposX,this.internaldata.scalex(griddata.startposX))
       this.redraw()
     },
@@ -242,12 +251,12 @@ export default {
         .enter()
         .append("rect")
         .attr("class", "square")
-        .attr("x", function(d) { return scalex(d.x); })
-        .attr("y", function(d) { return scaley(d.y); })
+        .attr("x", function(d) { return d.v_x; })
+        .attr("y", function(d) { return d.v_y; })
         .attr("xindex", function(d) { return d.xindex; })
         .attr("yindex", function(d) { return d.yindex; })
-        .attr("width", function(d) { return scalew(d.width); })
-        .attr("height", function(d) { return scaleh(d.height); })
+        .attr("width", function(d) { return d.v_width; })
+        .attr("height", function(d) { return d.v_height; })
         .style("fill", function(d) { return d.attrs[curAttr].color; })
         .style("stroke", "#222");
 

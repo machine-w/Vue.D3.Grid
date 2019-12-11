@@ -1,7 +1,7 @@
 import { OverColor } from ".";
 export default {
     callOper (v,d3) {
-        let {scalex,scalew,scaley,scaleh,scatter} = v.internaldata
+        let {scatter} = v.internaldata
         // let p_brush = d3.polybrush()
         //             .x(d3.scaleLinear().range([v.marginX, size.width]))
         //             .y(d3.scaleLinear().range([v.marginY, size.height]))
@@ -28,7 +28,7 @@ export default {
 			// set the 'selected' class for the circle
 			scatter.selectAll(".square").filter(function(d,i) {
 				// console.log(d.x,d.y);
-				if (brush.isWithinExtent(scalex(d.x)+scalew(d.width)/2, scaley(d.y) + scaleh(d.height)/2)) {
+				if (brush.isWithinExtent(d.v_x+d.v_width/2, d.v_y + d.v_height/2)) {
 					return true;
 				} else {
 					return false;
