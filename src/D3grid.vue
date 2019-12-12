@@ -15,7 +15,7 @@ import row_select from './opermode/select-row'
 import col_select from './opermode/select-col'
 import poly_select from './opermode/select-poly'
 import line_select from './opermode/select-line'
-
+import rect_select from './opermode/select-rect'
 
 
 var i = 0
@@ -26,7 +26,8 @@ const oper_mode = {
   row_select,
   col_select,
   poly_select,
-  line_select
+  line_select,
+  rect_select
 }
 
 const props = {

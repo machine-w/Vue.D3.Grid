@@ -27,6 +27,7 @@
                     <option value="col_select">列选择</option>
                     <option value="poly_select">多边形选择</option>
                     <option value="line_select">线形选择</option>
+                    <option value="rect_select">矩形选择</option>
                   </select>       
               </div>
             </div> 
