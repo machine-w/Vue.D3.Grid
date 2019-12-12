@@ -5,6 +5,7 @@
 <script>
 import * as d3 from 'd3'
 import './util/polybrush'
+import './util/linebrush'
 import resize from 'vue-resize-directive'
 import {compareString, anchorTodx, toPromise, findInParents} from './d3-utils'
 import {ATTRS} from './attrs'
@@ -13,6 +14,7 @@ import single_select from './opermode/select-single'
 import row_select from './opermode/select-row'
 import col_select from './opermode/select-col'
 import poly_select from './opermode/select-poly'
+import line_select from './opermode/select-line'
 
 
 
@@ -23,7 +25,8 @@ const oper_mode = {
   single_select,
   row_select,
   col_select,
-  poly_select
+  poly_select,
+  line_select
 }
 
 const props = {
