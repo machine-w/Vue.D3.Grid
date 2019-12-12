@@ -86,7 +86,7 @@ export default {
     let svg = d3.select(this.$el).append('svg')
           .attr('width', size.width)
           .attr('height', size.height)
-    let grid = svg.append('g')
+    // let grid = svg.append('g')
     // let g = null
     // let zoom = null
     // if (this.zoomable) {
@@ -108,7 +108,8 @@ export default {
     let scatter = svg.append('g')
         .attr("clip-path", "url(#clip)")
 
-    let brusher=svg.append("g").attr("class", "brush")//.x(d3.scaleLinear().range([0, 0])).y(d3.scaleLinear().range([0, 0]))
+    let brusher=svg.append("g").attr("class", "brush")
+    let rectbrusher=svg.append("g").attr("class", "brush")
         // .attr("class", "clip")
     var zoom = d3.zoom()
       .scaleExtent([.1, 100])  // This control how much you can unzoom (x0.5) and zoom (x20)
@@ -121,7 +122,8 @@ export default {
       scatter,
       clip,
       zoom,
-      brusher
+      brusher,
+      rectbrusher
     }
     this.currentAttr=this.viewAttr
     
@@ -158,19 +160,20 @@ export default {
     // },
     updateChart(g) {
       this.currentTransform = d3.event.transform
-      var newX = d3.event.transform.rescaleX(this.internaldata.axis_scalex);
-      var newY = d3.event.transform.rescaleY(this.internaldata.axis_scaley);
+      var newX = d3.event.transform.rescaleX(this.internaldata.axis_scalex)
+      var newY = d3.event.transform.rescaleY(this.internaldata.axis_scaley)
       // update axes with these new boundaries
       this.internaldata.xAxis.call(d3.axisTop(newX))
       this.internaldata.yAxis.call(d3.axisLeft(newY))
       this.internaldata.svg
         .selectAll(".row")
-        .attr('transform', d3.event.transform);
+        .attr('transform', d3.event.transform)
       this.internaldata.svg
         .selectAll(".brush")
-        .attr('transform', d3.event.transform);
-      this.internaldata.svg
-        .select(".brush").selectAll('.extent').style("stroke-width",2.5/d3.event.transform.k);
+        .attr('transform', d3.event.transform)
+        .each(function(d, i) {
+          d3.select(this).selectAll('.extent,.selection').style("stroke-width",2.5/d3.event.transform.k)
+        })
     },
     onData(griddata) {
       
@@ -277,7 +280,13 @@ export default {
       });
     },
     updateOper(){
-        this.internaldata.brusher.selectAll('*').remove()//.attr("width", "0").attr("height", "0");
+        // debugger
+        this.internaldata.brusher.selectAll('*').remove()
+        if (this.internaldata.rectbrusher.attr('fill') != null){
+          this.internaldata.rectbrusher.call(d3.brush().clear)
+          this.internaldata.rectbrusher.selectAll('*').remove()
+        }
+        
         this.updateColor()
         this.getOperMode.callOper(this,d3)
     },

@@ -1,6 +1,6 @@
 export default {
     callOper (v,d3) {
-        let {scatter,brusher} = v.internaldata
+        let {scatter,rectbrusher} = v.internaldata
         var brush = d3.brush()
         // .x(d3.scaleLinear().range([v.marginX, v.data.endX]))
         // .y(d3.scaleLinear().range([v.marginY, v.data.endY]))
@@ -20,7 +20,7 @@ export default {
             scatter.selectAll(".selected").each(function(d, i) {ds.push(d)})
             v.$emit('clicked', {elements: ds, oper:'rect_select'})
 		})
-        
-        brusher.call(brush)
+        // rectbrusher.call(brush.clear);
+        rectbrusher.call(brush)
     }
 }
