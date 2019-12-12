@@ -16,7 +16,7 @@ export default {
         .on("end", function() {
             let ds=[]
             scatter.selectAll(".selected").each(function(d, i) {ds.push(d)})
-            v.$emit('clicked', {elements: ds, oper:'poly_select'})
+            v.$emit('clicked', {elements: ds, oper:'poly_select',select_index:null})
 		})
         brusher.call(brush)
     }

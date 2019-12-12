@@ -63,7 +63,7 @@ export default {
           }
         })
         .each(function(d, i) {ds.push(d)})
-          v.$emit('clicked', {elements: ds, oper:'col_select',select_row:curIndex})
+          v.$emit('clicked', {elements: ds, oper:'col_select',select_index:curIndex})
       });
   }
     // MouseOver (target,d, i,v) {

@@ -16,6 +16,7 @@ import col_select from './opermode/select-col'
 import poly_select from './opermode/select-poly'
 import line_select from './opermode/select-line'
 import rect_select from './opermode/select-rect'
+import {rowSplit,rowJoin,columnJoin,columnSplit} from './util/editgrid'
 
 
 var i = 0
@@ -312,6 +313,18 @@ export default {
       })
       this.updateColor()
       return this.redrawIfNeeded(update)
+    },
+
+    splitRow(data,rowIndex,update=true){
+      console.log(rowIndex)
+      rowIndex = parseInt(rowIndex)
+      if (rowIndex == null || isNaN(rowIndex) ) {
+        return Promise.resolve(false)
+      }
+      console.log(rowIndex)
+      rowSplit(this.internaldata.griddata.grid,rowIndex)
+      return this.redrawIfNeeded(update)
+
     }
   },
 

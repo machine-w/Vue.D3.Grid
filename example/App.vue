@@ -109,6 +109,10 @@
               <i class="fa fa-trash" aria-hidden="true"></i>修改被选择节点值                      
               </button>
 
+              <button type="button" class="btn btn-primary" @click="splitRow" data-toggle="tooltip" data-placement="top" title="clear events">
+              <i class="fa fa-trash" aria-hidden="true"></i>选择行并分割                      
+              </button>
+
             </div>
             
 
@@ -148,6 +152,7 @@ export default {
       Marginy: 30,
       nodeText: 'text',
       currentLattices: null,
+      currentIndex:null,
       zoomable: true,
       isLoading: false,
       events: [],
@@ -172,18 +177,15 @@ export default {
     modifyNodeValue () {
       this.do('modifyCurAttr',{'zone':this.v_zone,'color':this.v_color,'value':this.v_value})
     },
-    // collapseAll () {
-    //   this.do('collapseAll')
-    // },
-    // showOnlyChildren () {
-    //   this.do('showOnlyChildren')
-    // },
-    // show () {
-    //   this.do('show')
-    // },
+    splitRow(){
+      console.log(this.currentIndex)
+      this.do('splitRow',this.currentIndex)
+    },
     onClick (evt) {
       // console.log(evt)
       this.currentLattices = evt.elements
+      this.currentIndex = evt.select_index
+      // console.log(this.currentIndex)
       this.onEvent(evt)
     },
     onEvent (data) {
