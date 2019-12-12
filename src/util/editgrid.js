@@ -25,8 +25,10 @@ export function rowSplit(griddata, rowindex) {
 export function columnSplit(griddata, columindex) {
     griddata.forEach(function (row) {
         row[columindex].width /= 2
+        row[columindex].v_width /= 2
         let newcolum = {...row[columindex]}
         newcolum.x += newcolum.width
+        newcolum.v_x += newcolum.v_width
         newcolum.yindex += 1
         for (let index = columindex+1; index < row.length; index++) {
             row[index].yindex += 1

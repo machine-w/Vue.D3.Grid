@@ -104,14 +104,41 @@
                   </div>
               </div> 
 
+               <div class="form-group">
+                <button type="button" class="btn btn-primary" @click="modifyNodeValue" data-toggle="tooltip" data-placement="top" title="clear events">
+                <i class="fa fa-trash" aria-hidden="true"></i>修改被选择节点值                      
+                </button>
+               </div>
 
-              <button type="button" class="btn btn-primary" @click="modifyNodeValue" data-toggle="tooltip" data-placement="top" title="clear events">
-              <i class="fa fa-trash" aria-hidden="true"></i>修改被选择节点值                      
-              </button>
+            </div>
+            
 
-              <button type="button" class="btn btn-primary" @click="splitRow" data-toggle="tooltip" data-placement="top" title="clear events">
-              <i class="fa fa-trash" aria-hidden="true"></i>选择行并分割                      
-              </button>
+            
+          </div>
+      </div>
+
+      <div class="panel panel-default">
+          <div class="panel-heading">分割与合并</div>
+          <div class="panel-body">
+            <div class="form-horizontal">
+
+             
+                <button type="button" class="btn btn-default" @click="splitRow" data-toggle="tooltip" data-placement="top" title="clear events">
+                <i class="fa fa-trash" aria-hidden="true"></i>行分割                      
+                </button>
+
+                <button type="button" class="btn btn-default" @click="joinRow" data-toggle="tooltip" data-placement="top" title="clear events">
+                <i class="fa fa-trash" aria-hidden="true"></i>行合并                     
+                </button>
+
+                <button type="button" class="btn btn-default" @click="splitCol" data-toggle="tooltip" data-placement="top" title="clear events">
+                <i class="fa fa-trash" aria-hidden="true"></i>列分割                      
+                </button>
+
+                <button type="button" class="btn btn-default" @click="joinCol" data-toggle="tooltip" data-placement="top" title="clear events">
+                <i class="fa fa-trash" aria-hidden="true"></i>列合并                    
+                </button>
+              
 
             </div>
             
@@ -178,8 +205,16 @@ export default {
       this.do('modifyCurAttr',{'zone':this.v_zone,'color':this.v_color,'value':this.v_value})
     },
     splitRow(){
-      console.log(this.currentIndex)
       this.do('splitRow',this.currentIndex)
+    },
+    joinRow(){
+      this.do('joinRow',this.currentIndex)
+    },
+    splitCol(){
+      this.do('splitCol',this.currentIndex)
+    },
+    joinCol(){
+      this.do('joinCol',this.currentIndex)
     },
     onClick (evt) {
       // console.log(evt)

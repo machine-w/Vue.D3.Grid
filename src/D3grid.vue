@@ -316,16 +316,37 @@ export default {
     },
 
     splitRow(data,rowIndex,update=true){
-      console.log(rowIndex)
       rowIndex = parseInt(rowIndex)
       if (rowIndex == null || isNaN(rowIndex) ) {
         return Promise.resolve(false)
       }
-      console.log(rowIndex)
       rowSplit(this.internaldata.griddata.grid,rowIndex)
       return this.redrawIfNeeded(update)
-
-    }
+    },
+    joinRow(data,rowIndex,update=true){
+      rowIndex = parseInt(rowIndex)
+      if (rowIndex == null || isNaN(rowIndex) ) {
+        return Promise.resolve(false)
+      }
+      rowJoin(this.internaldata.griddata.grid,rowIndex)
+      return this.redrawIfNeeded(update)
+    },
+    splitCol(data,colIndex,update=true){
+      colIndex = parseInt(colIndex)
+      if (colIndex == null || isNaN(colIndex) ) {
+        return Promise.resolve(false)
+      }
+      columnSplit(this.internaldata.griddata.grid,colIndex)
+      return this.redrawIfNeeded(update)
+    },
+    joinCol(data,colIndex,update=true){
+      colIndex = parseInt(colIndex)
+      if (colIndex == null || isNaN(colIndex) ) {
+        return Promise.resolve(false)
+      }
+      columnJoin(this.internaldata.griddata.grid,colIndex)
+      return this.redrawIfNeeded(update)
+    },
   },
 
   computed: {
