@@ -296,8 +296,23 @@ export default {
       scatter.selectAll(".selected").classed("selected", false)
       cells.data(function(d) {return d}).style("fill", function(d) { return d.attrs[that.currentAttr].color })
 
+    },
+    //API
+    redrawIfNeeded (update) {
+      return update ? this.redraw().then(() => true) : Promise.resolve(true)
+    },
+    modifyCurAttr(data,newvalue,update=false){
+      if (!data) {
+        return Promise.resolve(false)
+      }
+      data.forEach(element => {
+        element.attrs[this.currentAttr].color=newvalue.color
+        element.attrs[this.currentAttr].values={...newvalue.value} //shallow copy need to fix
+        element.attrs[this.currentAttr].zone=newvalue.zone
+      })
+      this.updateColor()
+      return this.redrawIfNeeded(update)
     }
-
   },
 
   computed: {

@@ -2,6 +2,7 @@ import { OverColor } from ".";
 import * as d3 from 'd3'
 export default {
   callOper (v,d3) {
+    let selectedIndex=null
     v.internaldata.cells.on('mouseover', function(d,i) {
         let curIndex = d3.select(this).attr("yindex");
         v.internaldata.cells.filter(function(d1,i1){
@@ -17,22 +18,41 @@ export default {
       })
       .on("mouseout",function(d,i){
         let curIndex = d3.select(this).attr("yindex");
-        v.internaldata.cells
-        .filter(function(d2,i1){
-          if(d2.yindex == curIndex){
-            return true;
-          }
-          else{
-            return false;
-          }
-        })
-        .transition()
-        .each(function(d, i) {
-          d3.select(this).style("fill",d.attrs[v.currentAttr].color)})
+        if (selectedIndex == null || selectedIndex != curIndex){
+          v.internaldata.cells
+          .filter(function(d2,i1){
+            if(d2.yindex == curIndex){
+              return true;
+            }
+            else{
+              return false;
+            }
+          })
+          .transition()
+          .each(function(d, i) {
+            d3.select(this).style("fill",d.attrs[v.currentAttr].color)})
+        }
       })
       .on("click",function(d,i){
         let ds=[]
         let curIndex = d3.select(this).attr("yindex");
+        if (selectedIndex != curIndex ){
+          if (selectedIndex != null){
+            v.internaldata.cells
+            .filter(function(d2,i1){
+              if(d2.yindex == selectedIndex){
+                return true;
+              }
+              else{
+                return false;
+              }
+            })
+            .transition()
+            .each(function(d, i) {
+              d3.select(this).style("fill",d.attrs[v.currentAttr].color)})
+          }
+          selectedIndex = curIndex
+        }
         v.internaldata.cells
         .filter(function(d2,i2){
           if(d2.yindex == curIndex){
