@@ -122,22 +122,42 @@
           <div class="panel-body">
             <div class="form-horizontal">
 
+              <div class="form-group">
+                <label for="splitRate" class="control-label col-sm-3">分割比例</label>
+                <div class="col-sm-7">
+                  <input id="splitRate" class="form-control" type="range" min="0" max="100" v-model.number="splitRate">
+                </div>
+                <div class="col-sm-2">
+                  <p>{{splitRate}}%</p>       
+                </div> 
+              </div>
+
+              <div class="form-group">
+                <label for="useSecondValue" class="control-label col-sm-6">合并时属性取后一行（列）</label>
+                <div class="col-sm-3">
+                  <input type="checkbox" id="useSecondValue" v-model="useSecondValue">
+                </div>
+                <div class="col-sm-3">
+                  <p>{{useSecondValue}}</p>       
+                </div> 
+              </div>               
+
              
-                <button type="button" class="btn btn-default" @click="splitRow" data-toggle="tooltip" data-placement="top" title="clear events">
-                <i class="fa fa-trash" aria-hidden="true"></i>行分割                      
-                </button>
+              <button type="button" :disabled="!row_select" class="btn btn-default" @click="splitRow" data-toggle="tooltip" data-placement="top" title="clear events">
+              <i class="fa fa-trash" aria-hidden="true"></i>行分割                      
+              </button>
 
-                <button type="button" class="btn btn-default" @click="joinRow" data-toggle="tooltip" data-placement="top" title="clear events">
-                <i class="fa fa-trash" aria-hidden="true"></i>行合并                     
-                </button>
+              <button type="button" :disabled="!row_select" class="btn btn-default" @click="joinRow" data-toggle="tooltip" data-placement="top" title="clear events">
+              <i class="fa fa-trash" aria-hidden="true"></i>行合并                     
+              </button>
 
-                <button type="button" class="btn btn-default" @click="splitCol" data-toggle="tooltip" data-placement="top" title="clear events">
-                <i class="fa fa-trash" aria-hidden="true"></i>列分割                      
-                </button>
+              <button type="button" :disabled="!col_select" class="btn btn-default" @click="splitCol" data-toggle="tooltip" data-placement="top" title="clear events">
+              <i class="fa fa-trash" aria-hidden="true"></i>列分割                      
+              </button>
 
-                <button type="button" class="btn btn-default" @click="joinCol" data-toggle="tooltip" data-placement="top" title="clear events">
-                <i class="fa fa-trash" aria-hidden="true"></i>列合并                    
-                </button>
+              <button type="button" :disabled="!col_select" class="btn btn-default" @click="joinCol" data-toggle="tooltip" data-placement="top" title="clear events">
+              <i class="fa fa-trash" aria-hidden="true"></i>列合并                    
+              </button>
               
 
             </div>
@@ -177,49 +197,62 @@ export default {
       operMode: 'single_select',
       Marginx: 30,
       Marginy: 30,
-      nodeText: 'text',
       currentLattices: null,
       currentIndex:null,
-      zoomable: true,
+      currentOper:null,
       isLoading: false,
       events: [],
       latticeWidth: 10,
 
       v_zone:0,
       v_value:{'a':1},
-      v_color:'#000000'
+      v_color:'#000000',
+
+      splitRate:50,
+      useSecondValue:false
+
+      
     }
+  },
+  mounted() {
+      this.getAllOrders()
   },
   components: {
     D3grid
   },
   methods: {
-    do (action,args) {
+    do (action,...args) {
       if (this.currentLattices) {
         this.isLoading = true
-        this.$refs['grid'][action](this.currentLattices,args).then(() => { this.isLoading = false })
+        this.$refs['grid'][action](this.currentLattices,...args).then(() => { this.isLoading = false })
       }
     },
 
     modifyNodeValue () {
-      this.do('modifyCurAttr',{'zone':this.v_zone,'color':this.v_color,'value':this.v_value})
+      // this.do('modifyCurAttr',{'zone':this.v_zone,'color':this.v_color,'value':this.v_value})
+      this.do('modifyCurAttr',this.v_zone,this.v_color,this.v_value)
     },
     splitRow(){
-      this.do('splitRow',this.currentIndex)
+      this.currentOper = null
+      this.do('splitRow',this.currentIndex,this.splitRate/100)
     },
     joinRow(){
-      this.do('joinRow',this.currentIndex)
+      this.currentOper = null
+      this.do('joinRow',this.currentIndex,this.useSecondValue)
     },
     splitCol(){
-      this.do('splitCol',this.currentIndex)
+      this.currentOper = null
+      this.do('splitCol',this.currentIndex,this.splitRate/100)
     },
     joinCol(){
-      this.do('joinCol',this.currentIndex)
+      this.currentOper = null
+      this.do('joinCol',this.currentIndex,this.useSecondValue)
     },
     onClick (evt) {
       // console.log(evt)
       this.currentLattices = evt.elements
       this.currentIndex = evt.select_index
+      this.currentOper = evt.oper
       // console.log(this.currentIndex)
       this.onEvent(evt)
     },
@@ -242,9 +275,15 @@ export default {
     },
     
   },
-  mounted() {
-      this.getAllOrders();
+  
+  computed: {
+    row_select() {
+      return (this.currentOper == 'row_select') ? true:false
+    },
+    col_select() {
+      return (this.currentOper == 'col_select') ? true:false
     }
+  }
 }
 </script>
 

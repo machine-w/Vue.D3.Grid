@@ -300,51 +300,53 @@ export default {
     },
     //API
     redrawIfNeeded (update) {
+      // this.updateGraph(this.internaldata.griddata)
+      // return Promise.resolve(true)
       return update ? this.redraw().then(() => true) : Promise.resolve(true)
     },
-    modifyCurAttr(data,newvalue,update=false){
+    modifyCurAttr(data,zone,color,value,update=false){
       if (!data) {
         return Promise.resolve(false)
       }
       data.forEach(element => {
-        element.attrs[this.currentAttr].color=newvalue.color
-        element.attrs[this.currentAttr].values={...newvalue.value} //shallow copy need to fix
-        element.attrs[this.currentAttr].zone=newvalue.zone
+        element.attrs[this.currentAttr].color=color
+        element.attrs[this.currentAttr].values={...value} //shallow copy need to fix
+        element.attrs[this.currentAttr].zone=zone
       })
       this.updateColor()
       return this.redrawIfNeeded(update)
     },
 
-    splitRow(data,rowIndex,update=true){
+    splitRow(data,rowIndex,splitRate=0.5,update=true){
       rowIndex = parseInt(rowIndex)
       if (rowIndex == null || isNaN(rowIndex) ) {
         return Promise.resolve(false)
       }
-      rowSplit(this.internaldata.griddata.grid,rowIndex)
+      rowSplit(this.internaldata.griddata.grid,rowIndex,splitRate)
       return this.redrawIfNeeded(update)
     },
-    joinRow(data,rowIndex,update=true){
+    joinRow(data,rowIndex,useSecondValue=false,update=true){
       rowIndex = parseInt(rowIndex)
       if (rowIndex == null || isNaN(rowIndex) ) {
         return Promise.resolve(false)
       }
-      rowJoin(this.internaldata.griddata.grid,rowIndex)
+      rowJoin(this.internaldata.griddata.grid,rowIndex,useSecondValue)
       return this.redrawIfNeeded(update)
     },
-    splitCol(data,colIndex,update=true){
+    splitCol(data,colIndex,splitRate=0.5,update=true){
       colIndex = parseInt(colIndex)
       if (colIndex == null || isNaN(colIndex) ) {
         return Promise.resolve(false)
       }
-      columnSplit(this.internaldata.griddata.grid,colIndex)
+      columnSplit(this.internaldata.griddata.grid,colIndex,splitRate)
       return this.redrawIfNeeded(update)
     },
-    joinCol(data,colIndex,update=true){
+    joinCol(data,colIndex,useSecondValue=false,update=true){
       colIndex = parseInt(colIndex)
       if (colIndex == null || isNaN(colIndex) ) {
         return Promise.resolve(false)
       }
-      columnJoin(this.internaldata.griddata.grid,colIndex)
+      columnJoin(this.internaldata.griddata.grid,colIndex,useSecondValue)
       return this.redrawIfNeeded(update)
     },
   },
