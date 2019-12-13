@@ -27,7 +27,17 @@
                       <option value="rect_select">矩形选择</option>
                     </select>       
                   </div>
-              </div> 
+              </div>
+
+              <div class="form-group">
+                <label for="Opacity" class="control-label col-sm-3">透明度</label>
+                <div class="col-sm-7">
+                  <input id="Opacity" class="form-control" type="range" min="0" max="100" v-model.number="Opacity">
+                </div> 
+                  <div class="col-sm-2">
+                    <p>{{vOpacity}}</p>       
+                </div> 
+              </div>  
 
               <div class="form-group">
                 <label for="margin-x" class="control-label col-sm-3">左边框</label>
@@ -57,7 +67,17 @@
                 <div class="col-sm-2">
                   <p>{{latticeWidth}}px</p>       
                 </div> 
-              </div>        
+              </div>
+
+              <div class="form-group">
+                <label for="strokeWidth" class="control-label col-sm-3">边框宽度</label>
+                <div class="col-sm-7">
+                  <input id="strokeWidth" class="form-control" type="range" min="0" max="100" v-model.number="strokeWidth">
+                </div>
+                <div class="col-sm-2">
+                  <p>{{vstrokeWidth}}px</p>    
+                </div> 
+              </div>
 
 
               <div class="form-group">
@@ -176,7 +196,7 @@
 
     </div>
     <div class="col-md-8 panel panel-default">
-      <D3grid ref="grid" class="grid" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
+      <D3grid ref="grid" class="grid" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
        @clicked="onClick" ></D3grid>
     </div>
     <div class="col-md-2">
@@ -204,6 +224,8 @@ export default {
       operMode: 'single_select',
       Marginx: 30,
       Marginy: 30,
+      Opacity: 100,
+      strokeWidth:20,
       currentLattices: null,
       currentIndex:null,
       currentOper:null,
@@ -289,6 +311,12 @@ export default {
     },
     col_select() {
       return (this.currentOper == 'col_select') ? true:false
+    },
+    vOpacity() {
+      return this.Opacity/100
+    },
+    vstrokeWidth() {
+      return this.strokeWidth/20
     }
   }
 }

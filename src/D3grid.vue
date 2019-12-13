@@ -59,11 +59,14 @@ const props = {
       return MODES.indexOf(value) !== -1
     }
   },
-
-  // zoomable: {
-  //   type: Boolean,
-  //   default: false
-  // }
+  Opacity: {
+    type: Number,
+    default: 1
+  },
+  strokeWidth:{
+    type: Number,
+    default: 1
+  },
 }
 
 const directives = {
@@ -108,6 +111,7 @@ export default {
         .attr("y", this.marginY);
     let scatter = svg.append('g')
         .attr("clip-path", "url(#clip)")
+
 
     let brusher=svg.append("g").attr("class", "brush")
     let rectbrusher=svg.append("g").attr("class", "brush")
@@ -242,7 +246,9 @@ export default {
       return new Promise((resolve, reject) => {
         const curAttr =this.currentAttr
         
-        let {scalex,scalew,scaley,scaleh,g,svg,axis_scalex,axis_scaley} = this.internaldata
+        let {scalex,scalew,scaley,scaleh,g,svg,axis_scalex,axis_scaley,scatter} = this.internaldata
+        
+        scatter.style("stroke-width", this.strokeWidth).style("opacity", this.Opacity)
         this.internaldata.xAxis = svg.append("g")
           .attr("class", "axis")
           .style("font", "15px times")
@@ -253,11 +259,12 @@ export default {
           .style("font", "15px times")
           .attr("transform", "translate(" + griddata.startX + ",0)")
           .call(d3.axisLeft(axis_scaley));
-        this.internaldata.row = this.internaldata.scatter.selectAll(".row")
+        this.internaldata.row = scatter.selectAll(".row")
         .data(griddata.grid)
         .enter()
         .append("g")
-        .attr("class", "row");
+        .attr("class", "row")
+
         // console.log(curAttr)
         this.internaldata.cells = this.internaldata.row.selectAll(".square")
         .data(function(d) {return d;})
@@ -271,7 +278,9 @@ export default {
         .attr("width", function(d) { return d.v_width; })
         .attr("height", function(d) { return d.v_height; })
         .style("fill", function(d) { return d.attrs[curAttr].color; })
-        .style("stroke", "#222");
+        .style("stroke", "#222")
+        
+
 
         //更新操作
         this.updateOper()
@@ -382,6 +391,12 @@ export default {
       this.currentOperMode=current
       this.updateOper()
       // this.redraw()
+    },
+    strokeWidth (current, old) {
+      this.internaldata.scatter.style("stroke-width", current)
+    },
+    Opacity (current, old) {
+      this.internaldata.scatter.style("opacity", current)
     },
     // zoomable (newValue) {
     //   if (newValue) {
