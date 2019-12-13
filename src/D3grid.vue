@@ -71,6 +71,10 @@ const props = {
     type: Boolean,
     default: false
   },
+  bgImg: {
+    type: String,
+    default: 'bg.png'
+  },
 }
 
 const directives = {
@@ -112,7 +116,7 @@ export default {
         .attr("width",size.width)
         .attr("height",size.height)
         .append("image")
-        .attr("xlink:href", "bg.png")
+        .attr("xlink:href", this.bgImg)
         .attr("class","bgimg")
         // .attr("width",size.width)
         // .attr("height",size.width)
@@ -249,14 +253,14 @@ export default {
         }
       }
       //设置背景图大小
-      // this.internaldata.svg
-      //   .select('.venus')
-      //   .attr("width",griddata.endX-griddata.startX)
-      //   .attr("height",griddata.endY-griddata.startY)
-      // this.internaldata.svg
-      //   .select('.bgimg')
-      //   .attr("width",griddata.endX-griddata.startX)
-      //   .attr("height",griddata.endY-griddata.startY)
+      this.internaldata.svg
+        .select('.venus')
+        .attr("width",griddata.endX-griddata.startX)
+        .attr("height",griddata.endY-griddata.startY)
+      this.internaldata.svg
+        .select('.bgimg')
+        .attr("width",griddata.endX-griddata.startX)
+        .attr("height",griddata.endY-griddata.startY)
 
       this.internaldata.bgrect
         .attr("width",griddata.endX-griddata.startX)
@@ -451,6 +455,9 @@ export default {
     visibilityBg (current, old) {
       this.internaldata.bgrect.attr("visibility", current)
     },
+    bgImg (current,old){
+      this.internaldata.svg.select('.bgimg').attr("xlink:href", current)
+    }
     // zoomable (newValue) {
     //   if (newValue) {
     //     this.internaldata.zoom = this.setUpZoom()
@@ -517,6 +524,6 @@ export default {
     /* stroke-opacity: 0.5; */
 }
 .bgimg{
-  object-fit: cover;
+  object-fit: fill;
 }
 </style>

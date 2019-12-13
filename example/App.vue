@@ -87,7 +87,14 @@
                 <div class="col-sm-3">
                   <p>{{viewBackgroud}}</p>       
                 </div> 
-              </div>          
+              </div>
+
+              <div class="form-group">
+                <label for="layout-type" class="control-label col-sm-3">背景图片</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model="bgImg" >
+                  </div>
+              </div>         
 
 
               <div class="form-group">
@@ -206,7 +213,7 @@
 
     </div>
     <div class="col-md-8 panel panel-default">
-      <D3grid ref="grid" class="grid" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
+      <D3grid ref="grid" class="grid" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
        @clicked="onClick" ></D3grid>
     </div>
     <div class="col-md-2">
@@ -234,7 +241,7 @@ export default {
       operMode: 'single_select',
       Marginx: 30,
       Marginy: 30,
-      Opacity: 100,
+      Opacity: 20,
       strokeWidth:20,
       currentLattices: null,
       currentIndex:null,
@@ -249,7 +256,8 @@ export default {
 
       splitRate:50,
       useSecondValue:false,
-      viewBackgroud:true
+      viewBackgroud:true,
+      bgImg:'bg.png'
     }
   },
   mounted() {
