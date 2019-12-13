@@ -30,11 +30,11 @@ function oriGridDataRow(width,height,startx,starty,xcount,ycount){
     let ypos = starty;
 
     // iterate for rows
-    for (var row = 0; row < xcount; row ++){
+    for (var row = 0; row < ycount; row ++){
     data.push(new Array());
 
     //iterate for cells/columns inside rows
-    for (var column = 0; column < ycount; column ++){
+    for (var column = 0; column < xcount; column ++){
         
         data[row].push({
         xindex:row,
@@ -77,11 +77,11 @@ function oriGridData(width,height,startx,starty,xcount,ycount){
     let ypos = starty;
 
     // iterate for rows
-    for (let row = 0; row < xcount; row ++){
+    for (let row = 0; row < ycount; row ++){
     data.push(new Array());
 
     //iterate for cells/columns inside rows
-    for (let column = 0; column < ycount; column ++){
+    for (let column = 0; column < xcount; column ++){
         
         data[row].push({
         xindex:row,
@@ -109,8 +109,6 @@ function oriGridData(width,height,startx,starty,xcount,ycount){
 
     return res;
 }
-
-
-Mock.mock('/api/getGridDataRow','get',oriGridDataRow(100,100,1234000,100343400,30,100));
+Mock.mock('/api/getGridDataRow','get',oriGridDataRow(100,100,1234000,100343400,100,30));
 Mock.mock('/api/getGridDataColum','get',oriGridDataRow(300,700,50,50,10,100));
 Mock.mock('/api/getGridDataLayer','get',oriGridData(100,100,0,0,100,100));

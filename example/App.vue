@@ -79,6 +79,16 @@
                 </div> 
               </div>
 
+              <div class="form-group">
+                <label for="viewBackgroud" class="control-label col-sm-5">是否显示背景图片</label>
+                <div class="col-sm-4">
+                  <input type="checkbox" id="viewBackgroud" v-model="viewBackgroud">
+                </div>
+                <div class="col-sm-3">
+                  <p>{{viewBackgroud}}</p>       
+                </div> 
+              </div>          
+
 
               <div class="form-group">
                 <span v-if="currentLattices">当前选择节点数量： {{currentLattices.length}}</span>
@@ -196,7 +206,7 @@
 
     </div>
     <div class="col-md-8 panel panel-default">
-      <D3grid ref="grid" class="grid" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
+      <D3grid ref="grid" class="grid" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
        @clicked="onClick" ></D3grid>
     </div>
     <div class="col-md-2">
@@ -238,9 +248,8 @@ export default {
       v_color:'#000000',
 
       splitRate:50,
-      useSecondValue:false
-
-      
+      useSecondValue:false,
+      viewBackgroud:true
     }
   },
   mounted() {

@@ -67,6 +67,10 @@ const props = {
     type: Number,
     default: 1
   },
+  viewBackgroud:{
+    type: Boolean,
+    default: false
+  },
 }
 
 const directives = {
@@ -100,6 +104,19 @@ export default {
     //   svg.call(zoom.transform, d3.zoomIdentity)
     // }
     //////////////////////////////////////////////////////////////////
+    let background= svg.append("defs")
+        .append("pattern")
+        .attr("id", "venus")
+        .attr("class", "venus")
+        .attr('patternUnits', 'userSpaceOnUse')
+        .attr("width",size.width)
+        .attr("height",size.height)
+        .append("image")
+        .attr("xlink:href", "bg.png")
+        .attr("class","bgimg")
+        // .attr("width",size.width)
+        // .attr("height",size.width)
+
     let clip = svg.append("defs")
         // .attr("class", "clip")
         .append("SVG:clipPath")
@@ -108,9 +125,20 @@ export default {
         .attr("width", size.width )
         .attr("height", size.height )
         .attr("x", this.marginX)
-        .attr("y", this.marginY);
+        .attr("y", this.marginY)
+        
+    
+
     let scatter = svg.append('g')
         .attr("clip-path", "url(#clip)")
+
+    let bgrect = scatter.append("rect")
+        .attr("x", this.marginX)
+        .attr("y", this.marginY)
+        .attr("width", size.width )
+        .attr("height", size.height )
+        .attr("fill", "url(#venus)")
+        .attr("visibility", "hidden")
 
 
     let brusher=svg.append("g").attr("class", "brush")
@@ -128,7 +156,9 @@ export default {
       clip,
       zoom,
       brusher,
-      rectbrusher
+      rectbrusher,
+      background,
+      bgrect
     }
     this.currentAttr=this.viewAttr
     
@@ -179,6 +209,7 @@ export default {
         .each(function(d, i) {
           d3.select(this).selectAll('.extent,.selection').style("stroke-width",2.5/d3.event.transform.k)
         })
+      this.internaldata.bgrect.attr('transform', d3.event.transform)
     },
     onData(griddata) {
       
@@ -217,11 +248,25 @@ export default {
           cell.v_y = this.internaldata.scaley(cell.y)
         }
       }
+      //设置背景图大小
+      // this.internaldata.svg
+      //   .select('.venus')
+      //   .attr("width",griddata.endX-griddata.startX)
+      //   .attr("height",griddata.endY-griddata.startY)
+      // this.internaldata.svg
+      //   .select('.bgimg')
+      //   .attr("width",griddata.endX-griddata.startX)
+      //   .attr("height",griddata.endY-griddata.startY)
+
+      this.internaldata.bgrect
+        .attr("width",griddata.endX-griddata.startX)
+        .attr("height",griddata.endY-griddata.startY)
+        .attr("visibility", this.visibilityBg)
       // console.log(griddata.startX,griddata.endX,griddata.startposX,griddata.endposX,this.internaldata.scalex(griddata.startposX))
       this.redraw()
     },
     redraw(){
-      let {griddata,clip,zoom,svg} = this.internaldata
+      let {griddata,clip,zoom,svg,background,bgrect} = this.internaldata
       if (griddata) {
         this.clean()
         const size = this.getSize()
@@ -248,7 +293,7 @@ export default {
         
         let {scalex,scalew,scaley,scaleh,g,svg,axis_scalex,axis_scaley,scatter} = this.internaldata
         
-        scatter.style("stroke-width", this.strokeWidth).style("opacity", this.Opacity)
+        scatter.style("stroke-width", this.strokeWidth)
         this.internaldata.xAxis = svg.append("g")
           .attr("class", "axis")
           .style("font", "15px times")
@@ -264,6 +309,7 @@ export default {
         .enter()
         .append("g")
         .attr("class", "row")
+        .style("opacity", this.Opacity)
 
         // console.log(curAttr)
         this.internaldata.cells = this.internaldata.row.selectAll(".square")
@@ -279,6 +325,7 @@ export default {
         .attr("height", function(d) { return d.v_height; })
         .style("fill", function(d) { return d.attrs[curAttr].color; })
         .style("stroke", "#222")
+
         
 
 
@@ -367,6 +414,9 @@ export default {
     getOperMode () {
       return oper_mode[this.operMode]
     },
+    visibilityBg(){
+      return this.viewBackgroud ? 'visible' : 'hidden'
+    }
   },
 
   watch: {
@@ -396,7 +446,10 @@ export default {
       this.internaldata.scatter.style("stroke-width", current)
     },
     Opacity (current, old) {
-      this.internaldata.scatter.style("opacity", current)
+      this.internaldata.row.style("opacity", current)
+    },
+    visibilityBg (current, old) {
+      this.internaldata.bgrect.attr("visibility", current)
     },
     // zoomable (newValue) {
     //   if (newValue) {
@@ -462,5 +515,8 @@ export default {
     /* fill-opacity: 0.4; */
     stroke: #111;
     /* stroke-opacity: 0.5; */
+}
+.bgimg{
+  object-fit: cover;
 }
 </style>
