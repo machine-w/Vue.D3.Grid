@@ -61,20 +61,27 @@
 
 
               <div class="form-group">
-                <span v-if="currentLattices">当前节点数量： {{currentLattices.length}}</span>
+                <span v-if="currentLattices">当前选择节点数量： {{currentLattices.length}}</span>
                 <span v-else>无选择节点</span>
                 <i v-if="isLoading" class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
-              </div>  
+              </div>
+              <div class="form-group">
+                <span v-if="currentOper">当前操作： {{currentOper}}</span>
+              </div>
+              <div class="form-group">
+                <span v-if="row_select">当前选择行： {{currentIndex}}</span>
+                <span v-if="col_select">当前选择列： {{currentIndex}}</span>
+              </div>
 
               <button type="button"  class="btn btn-default" @click="getAllOrdersRow" data-toggle="tooltip" data-placement="top" title="freshData">
-              <i class="fa fa-arrows" aria-hidden="true"></i>           
+              <i class="fa fa-arrows" aria-hidden="true"></i>加载横向网格       
               </button>
 
               <button type="button" class="btn btn-default" @click="getAllOrders" data-toggle="tooltip" data-placement="top" title="Reset Zoom">
-              <i class="fa fa-arrows-alt" aria-hidden="true"></i>                             
+              <i class="fa fa-arrows-alt" aria-hidden="true"></i>加载俯视网格                           
               </button>
               <button type="button" class="btn btn-warning" @click="()=>{this.events=[]}" data-toggle="tooltip" data-placement="top" title="clear events">
-              <i class="fa fa-trash" aria-hidden="true"></i>  删除记录                          
+              <i class="fa fa-trash" aria-hidden="true"></i>删除节点记录                          
               </button>
 
             </div> 
@@ -125,7 +132,7 @@
               <div class="form-group">
                 <label for="splitRate" class="control-label col-sm-3">分割比例</label>
                 <div class="col-sm-7">
-                  <input id="splitRate" class="form-control" type="range" min="0" max="100" v-model.number="splitRate">
+                  <input id="splitRate" class="form-control" type="range" min="1" max="99" v-model.number="splitRate">
                 </div>
                 <div class="col-sm-2">
                   <p>{{splitRate}}%</p>       
