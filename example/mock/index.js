@@ -65,7 +65,8 @@ function oriGridDataRow(width,height,startx,starty,xcount,ycount){
         points.push({
             x: randomNum(startx,startx+xcount*width),
             y: randomNum(starty,starty+ycount*height),
-            radius:randomNum(0,width>height?height:width),
+            radius:randomNum((width>=height?height:width)/ 10,(width>=height?height:width)/2),
+            core_radius:randomNum(0,(width>=height?height:width) / 10),
             color:getRandomColor(),
             core_color:getRandomColor(),
             attrs:{ z: randomNum(1,100),
@@ -117,11 +118,12 @@ function oriGridData(width,height,startx,starty,xcount,ycount){
     }
 
     //points
-    for (let i = 0; i < 100; i ++){
+    for (let i = 0; i < 1000; i ++){
         points.push({
             x: randomNum(startx,startx+xcount*width),
             y: randomNum(starty,starty+ycount*height),
-            radius:randomNum(0,width>height?height:width),
+            radius:randomNum((width>=height?height:width)/10,(width>=height?height:width)/2),
+            core_radius:randomNum(0,(width>=height?height:width)/10),
             color:getRandomColor(),
             core_color:getRandomColor(),
             attrs:{ z: randomNum(1,100),
@@ -136,4 +138,4 @@ function oriGridData(width,height,startx,starty,xcount,ycount){
 }
 Mock.mock('/api/getGridDataRow','get',oriGridDataRow(100,100,1234000,100343400,100,30))
 Mock.mock('/api/getGridDataColum','get',oriGridDataRow(300,700,50,50,10,100))
-Mock.mock('/api/getGridDataLayer','get',oriGridData(100,100,0,0,100,100))
+Mock.mock('/api/getGridDataLayer','get',oriGridData(10000,10000,0,0,100,100))

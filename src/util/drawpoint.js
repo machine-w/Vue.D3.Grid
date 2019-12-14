@@ -1,4 +1,4 @@
-export function drawCircle(contions,x, y, size,core_size,color="#FFFFFF",core_color="#000000") {
+export function drawCircle(contions,x, y, size,core_size,color="#FFFFFF",core_color="#000000",Opacity=1) {
     let color_id= "color"+color.slice(1)+core_color.slice(1)
     if (contions.selectAll("#"+color_id+"").size() == 0){
         contions.append("defs")
@@ -26,11 +26,13 @@ export function drawCircle(contions,x, y, size,core_size,color="#FFFFFF",core_co
         .attr("cy", y)
         .style("fill", "url(#"+color_id+")")
 		// .style("fill",color)
-		.attr("r", size)
+        .attr("r", size)
+        .style("opacity", Opacity)
     contions.append("circle")
 		.attr('class', 'point-core')
 		.attr("cx", x)
 		.attr("cy", y)
 		.style("fill",core_color)
-		.attr("r", core_size)
+        .attr("r", core_size)
+        .style("opacity", Opacity)
 }

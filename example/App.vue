@@ -86,7 +86,7 @@
                   <input type="checkbox" id="viewBackgroud" v-model="viewBackgroud">
                 </div>
                 <div class="col-sm-3">
-                  <p>{{viewBackgroud}}</p>       
+                  <p>{{viewBackgroud?'是':'否'}}</p>       
                 </div> 
               </div>
 
@@ -183,7 +183,47 @@
                   <input type="checkbox" id="useSecondValue" v-model="useSecondValue">
                 </div>
                 <div class="col-sm-3">
-                  <p>{{useSecondValue}}</p>       
+                  <p>{{useSecondValue?'是':'否'}}</p>       
+                </div> 
+              </div>               
+
+             
+              <button type="button" :disabled="!row_select" class="btn btn-default" @click="splitRow" data-toggle="tooltip" data-placement="top" title="clear events">
+              <i class="fa fa-trash" aria-hidden="true"></i>行分割                      
+              </button>
+
+              <button type="button" :disabled="!row_select" class="btn btn-default" @click="joinRow" data-toggle="tooltip" data-placement="top" title="clear events">
+              <i class="fa fa-trash" aria-hidden="true"></i>行合并                     
+              </button>
+
+              <button type="button" :disabled="!col_select" class="btn btn-default" @click="splitCol" data-toggle="tooltip" data-placement="top" title="clear events">
+              <i class="fa fa-trash" aria-hidden="true"></i>列分割                      
+              </button>
+
+              <button type="button" :disabled="!col_select" class="btn btn-default" @click="joinCol" data-toggle="tooltip" data-placement="top" title="clear events">
+              <i class="fa fa-trash" aria-hidden="true"></i>列合并                    
+              </button>
+              
+
+            </div>
+            
+
+            
+          </div>
+      </div>
+
+      <div class="panel panel-default">
+          <div class="panel-heading">点操作</div>
+          <div class="panel-body">
+            <div class="form-horizontal">
+
+              <div class="form-group">
+                <label for="viewPoints" class="control-label col-sm-5">是否显示点</label>
+                <div class="col-sm-4">
+                  <input type="checkbox" id="viewPoints" v-model="viewPoints">
+                </div>
+                <div class="col-sm-3">
+                  <p>{{viewPoints?'是':'否'}}</p>       
                 </div> 
               </div>               
 
@@ -214,7 +254,7 @@
 
     </div>
     <div class="col-md-8 panel panel-default">
-      <D3grid ref="grid" class="grid" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
+      <D3grid ref="grid" class="grid" :viewPoints="viewPoints" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
        @clicked="onClick" ></D3grid>
     </div>
     <div class="col-md-2">
@@ -240,9 +280,9 @@ export default {
       griddata:{},
       viewAttr: 'initHead',
       operMode: 'single_select',
-      Marginx: 30,
+      Marginx: 70,
       Marginy: 30,
-      Opacity: 20,
+      Opacity: 50,
       strokeWidth:20,
       currentLattices: null,
       currentIndex:null,
@@ -258,7 +298,9 @@ export default {
       splitRate:50,
       useSecondValue:false,
       viewBackgroud:true,
-      bgImg:'bg.png'
+      bgImg:'bg.png',
+
+      viewPoints:true,
     }
   },
   mounted() {

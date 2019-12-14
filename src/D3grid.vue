@@ -1,5 +1,5 @@
 <template>
-  <div class="viewport treeclass" v-resize="resize">
+  <div class="viewport gridclass" v-resize="resize">
   </div>
 </template>
 <script>
@@ -18,7 +18,7 @@ import line_select from './opermode/select-line'
 import rect_select from './opermode/select-rect'
 import draw_point from './opermode/draw_point'
 import {rowSplit,rowJoin,columnJoin,columnSplit} from './util/editgrid'
-
+import {drawCircle} from "./util/drawpoint"
 
 var i = 0
 var currentSelected = null
@@ -72,6 +72,10 @@ const props = {
   viewBackgroud:{
     type: Boolean,
     default: false
+  },
+  viewPoints:{
+    type: Boolean,
+    default: true
   },
   bgImg: {
     type: String,
@@ -253,6 +257,12 @@ export default {
           cell.v_y = this.internaldata.scaley(cell.y)
         }
       }
+      for (let point of griddata.points) {
+        point.v_radius=this.internaldata.scalew(point.radius)
+        point.v_core_radius=this.internaldata.scalew(point.core_radius)
+        point.v_x = this.internaldata.scalex(point.x)
+        point.v_y = this.internaldata.scaley(point.y)
+      }
       //设置背景图大小
       this.internaldata.svg
         .select('.venus')
@@ -331,9 +341,11 @@ export default {
         .style("fill", function(d) { return d.attrs[curAttr].color; })
         .style("stroke", "#222")
 
-        
-
-
+        if(this.viewPoints){
+          for (const point of griddata.points) {
+            drawCircle(scatter,point.v_x,point.v_y,point.v_radius,point.v_core_radius,point.color,point.core_color,this.Opacity)
+          }
+        }
         //更新操作
         this.updateOper()
         
@@ -452,55 +464,22 @@ export default {
     },
     Opacity (current, old) {
       this.internaldata.row.style("opacity", current)
+      this.internaldata.svg.selectAll(".point,.point_core").style("opacity", current)
     },
     visibilityBg (current, old) {
       this.internaldata.bgrect.attr("visibility", current)
     },
     bgImg (current,old){
       this.internaldata.svg.select('.bgimg').attr("xlink:href", current)
-    }
-    // zoomable (newValue) {
-    //   if (newValue) {
-    //     this.internaldata.zoom = this.setUpZoom()
-    //     return
-    //   }
-    //   this.removeZoom()
-    // }
+    },
+    viewPoints (current, old) {
+      this.redraw()
+    },
   }
 }
 </script>
 
 <style>
-.treeclass .nodetree  circle {
-  fill: #999;
-  r: 2.5;
-}
-
-.treeclass .node--internal circle {
-  cursor: pointer;
-  fill:  #555;
-  r: 3;
-}
-
-.treeclass .nodetree text {
-  font: 10px sans-serif;
-  cursor: pointer;
-}
-
-.treeclass .nodetree.selected text {
-  font-weight: bold;
-}
-
-.treeclass .node--internal text {
-  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
-}
-
-.treeclass .linktree {
-  fill: none;
-  stroke: #555;
-  stroke-opacity: 0.4;
-  stroke-width: 1.5px;
-}
 .brush .extent {
     stroke: #955;
     stroke-width: 2.5px;

@@ -8,7 +8,7 @@ export default {
       v.internaldata.cells
       .on("click",function(d,i){
         var coords = d3.mouse(this)
-        drawCircle(scatter,coords[0], coords[1], .1,.01,OverColor,"#000000")
+        drawCircle(scatter,coords[0], coords[1], 1,.1,OverColor,"#000000",v.Opacity)
         // drawCircle(scatter,coords[0]+50, coords[1], 5,2,OverColor,"#000000")
         // drawCircle(scatter,coords[0]+10, coords[1], 5,1,"#ff0000","#000000")
         // drawCircle(scatter,coords[0]+20, coords[1], 5,1,"#ffee00","#000000")
