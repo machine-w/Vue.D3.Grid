@@ -35,6 +35,7 @@ const oper_mode = {
 
 const props = {
   data: Object,
+  pointattr:Object,
   latticeWidth:{
     type: Number,
     default: 20
@@ -451,9 +452,7 @@ export default {
     visibilityBg(){
       return this.viewBackgroud ? 'visible' : 'hidden'
     },
-    pointattr(){
-      return {radius:1000,core_radius:100,color:"#ff0000",core_color:"#000000",attrs:{z: 100}}
-    }
+
   },
 
   watch: {

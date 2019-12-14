@@ -81,6 +81,16 @@
               </div>
 
               <div class="form-group">
+                <label for="viewPoints" class="control-label col-sm-5">是否显示点</label>
+                <div class="col-sm-4">
+                  <input type="checkbox" id="viewPoints" v-model="viewPoints">
+                </div>
+                <div class="col-sm-3">
+                  <p>{{viewPoints?'是':'否'}}</p>       
+                </div> 
+              </div>
+
+              <div class="form-group">
                 <label for="viewBackgroud" class="control-label col-sm-5">是否显示背景图片</label>
                 <div class="col-sm-4">
                   <input type="checkbox" id="viewBackgroud" v-model="viewBackgroud">
@@ -89,6 +99,8 @@
                   <p>{{viewBackgroud?'是':'否'}}</p>       
                 </div> 
               </div>
+
+
 
               <div class="form-group">
                 <label for="layout-type" class="control-label col-sm-3">背景图片</label>
@@ -162,7 +174,7 @@
           </div>
       </div>
 
-      <div class="panel panel-default">
+      <div v-if="lineoper" class="panel panel-default">
           <div class="panel-heading">分割与合并</div>
           <div class="panel-body">
             <div class="form-horizontal">
@@ -212,19 +224,43 @@
           </div>
       </div>
 
-      <div class="panel panel-default">
+      <div v-if="drawpointoper" class="panel panel-default">
           <div class="panel-heading">点操作</div>
           <div class="panel-body">
             <div class="form-horizontal">
-
+               <div  class="form-group">
+                <label for="layout-type" class="control-label col-sm-3">radius</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model.number="createPoint.radius" >
+                  </div>
+              </div>
+              <div  class="form-group">
+                <label for="layout-type" class="control-label col-sm-3">core_radius</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model.number="createPoint.core_radius" >
+                  </div>
+              </div>
               <div class="form-group">
-                <label for="viewPoints" class="control-label col-sm-5">是否显示点</label>
-                <div class="col-sm-4">
-                  <input type="checkbox" id="viewPoints" v-model="viewPoints">
-                </div>
-                <div class="col-sm-3">
-                  <p>{{viewPoints?'是':'否'}}</p>       
-                </div> 
+                <label for="layout-type" class="control-label col-sm-3">value</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model="createPoint.attrs.z" >
+                  </div>
+              </div> 
+              <div   class="form-group">
+                <label for="layout-type" class="control-label col-sm-3">color</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model="createPoint.color" >
+                  </div>
+              </div> 
+              <div class="form-group">
+                <label for="layout-type" class="control-label col-sm-3">core-color</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model="createPoint.core_color" >
+                  </div>
+              </div> 
+
+              <div v-if="draw_point" class="form-group">
+                <h1>修改点属性</h1>
               </div>
 
               <div  v-if="draw_point" class="form-group">
@@ -270,11 +306,13 @@
                   </div>
               </div> 
 
-              <div  class="form-group">
+              <div v-if="draw_point" class="form-group">
                 <button :disabled="!draw_point" type="button" class="btn btn-primary" @click="modifyPointValue" data-toggle="tooltip" data-placement="top" title="clear events">
                   <i class="fa fa-trash" aria-hidden="true"></i>修改被选点的值                    
                 </button>
               </div>
+
+
 
               
 
@@ -287,7 +325,7 @@
 
     </div>
     <div class="col-md-8 panel panel-default">
-      <D3grid ref="grid" class="grid" :viewPoints="viewPoints" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
+      <D3grid ref="grid" class="grid" :pointattr="createPoint" :viewPoints="viewPoints" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
        @clicked="onClick" ></D3grid>
     </div>
     <div class="col-md-2">
@@ -306,6 +344,7 @@
 <script>
 import axios from "axios"
 import D3grid from '../src/D3grid'
+// import draw_point from '../src/opermode/draw_point'
 export default {
   name: 'app',
   data () {
@@ -334,6 +373,7 @@ export default {
       bgImg:'bg.png',
 
       viewPoints:true,
+      createPoint:{radius:1000,core_radius:100,color:"#ff0000",core_color:"#000000",attrs:{z: 100}},
       currentPoint:{
           index:-1,
           x: 0,
@@ -433,7 +473,13 @@ export default {
     },
     vstrokeWidth() {
       return this.strokeWidth/20
-    }
+    },
+    drawpointoper(){
+      return (this.operMode == 'draw_point') ? true:false
+    },
+    lineoper(){
+      return (this.operMode == 'row_select' || this.operMode == 'col_select' ) ? true:false
+    },
   },
 }
 </script>

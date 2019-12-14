@@ -42,7 +42,7 @@ export default {
           core_radius:pointattr.core_radius,
           color:pointattr.color,
           core_color:pointattr.core_color,
-          attrs:pointattr.attrs
+          attrs:{...pointattr.attrs}
           }
         drawCircle(scatter,point,v.Opacity)
         griddata.points.push(point)
