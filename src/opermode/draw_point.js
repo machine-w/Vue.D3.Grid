@@ -1,22 +1,54 @@
 import { OverColor } from ".";
 import {drawCircle} from "../util/drawpoint"
-
-
+import { snow } from "color-name";
 export default {
   callOper (v,d3) {
-      let {svg,scatter,zoom} = v.internaldata
-      v.internaldata.cells
+      let {svg,scatter,zoom,griddata,scalex,scaley,scalew} = v.internaldata
+      let pointattr = v.pointattr
+      let preFill=OverColor
+      //选择点
+      svg.selectAll(".point,.point_core")
+      .on('mouseover', function(d,i) {
+        preFill=d3.select(this).style('fill')
+        d3.select(this).style("fill","FF6666")
+      })
+      .on("mouseout",function(d,i){
+        d3.select(this).style("fill",preFill)
+      })
       .on("click",function(d,i){
-        var coords = d3.mouse(this)
-        drawCircle(scatter,coords[0], coords[1], 1,.1,OverColor,"#000000",v.Opacity)
-        // drawCircle(scatter,coords[0]+50, coords[1], 5,2,OverColor,"#000000")
-        // drawCircle(scatter,coords[0]+10, coords[1], 5,1,"#ff0000","#000000")
-        // drawCircle(scatter,coords[0]+20, coords[1], 5,1,"#ffee00","#000000")
-        // drawCircle(scatter,coords[0]+30, coords[1], 5,.5)
-        // drawCircle(scatter,coords[0]+40, coords[1], 5,.2,"#ff00FF","#000000")
+        console.log(d)
+        v.$emit('clicked', {elements: [d],oper:'draw_point',select_index:null})
+      })
+      //新建点
+      v.internaldata.cells
+      .on('mouseover', function(d,i) {
+        d3.select(this).style("fill",OverColor);
+      })
+      .on("mouseout",function(d,i){
+        d3.select(this).transition().style("fill",d.attrs[v.currentAttr].color)
+      })
+      .on("click",function(d,i){
+        // d3.select(this).style("fill",OverColor);
+        let coords = d3.mouse(this)
+        const point = {
+          x: scalex.invert(coords[0]),
+          y: scaley.invert(coords[1]),
+          v_x:coords[0],
+          v_y:coords[1],
+          v_radius:scalew(pointattr.radius),
+          v_core_radius:scalew(pointattr.core_radius),
+          radius:pointattr.radius,
+          core_radius:pointattr.core_radius,
+          color:pointattr.color,
+          core_color:pointattr.core_color,
+          attrs:pointattr.attrs
+          }
+        drawCircle(scatter,coords[0], coords[1], point.v_radius,point.v_core_radius,pointattr.color,pointattr.core_color,v.Opacity)
+        griddata.points.push(point)
         svg.call(zoom.transform, d3.zoomIdentity.translate(v.currentTransform.x, v.currentTransform.y).scale(v.currentTransform.k))
-        // v.$emit('clicked', {elements: [d],oper:'single_select',select_index:null})
-        // d3.select(this).transition().style("fill",d.attrs[v.currentAttr].color);
-      });
+        // d3.select(this).style("fill",OverColor);
+        v.updateOper()
+        v.$emit('clicked', {elements: [point],oper:'draw_point',select_index:null})
+      })
   }
 }

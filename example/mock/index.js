@@ -118,7 +118,7 @@ function oriGridData(width,height,startx,starty,xcount,ycount){
     }
 
     //points
-    for (let i = 0; i < 1000; i ++){
+    for (let i = 0; i < 100; i ++){
         points.push({
             x: randomNum(startx,startx+xcount*width),
             y: randomNum(starty,starty+ycount*height),

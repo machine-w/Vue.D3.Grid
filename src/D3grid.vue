@@ -360,6 +360,10 @@ export default {
           this.internaldata.rectbrusher.call(d3.brush().clear)
           this.internaldata.rectbrusher.selectAll('*').remove()
         }
+        this.internaldata.svg.selectAll(".point,.point_core")
+          .on('mouseover', null)
+          .on("mouseout",null)
+          .on("click",null)
         
         this.updateColor()
         this.getOperMode.callOper(this,d3)
@@ -433,6 +437,9 @@ export default {
     },
     visibilityBg(){
       return this.viewBackgroud ? 'visible' : 'hidden'
+    },
+    pointattr(){
+      return {radius:1000,core_radius:100,color:"#ff0000",core_color:"#000000",attrs:{}}
     }
   },
 
