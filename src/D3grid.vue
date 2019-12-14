@@ -155,26 +155,6 @@ export default {
       .extent([[0, 0], [size.width, size.height]])
       .on("zoom", this.updateChart);
 
-    /////////////////////////point color
-    // let gradientPoint = svg.append("defs").append("radialGradient")
-
-    //     gradientPoint
-    //     .attr("id", "gradient")
-		// 		.attr("cx", "50%")	//not really needed, since 50% is the default
-		// 		.attr("cy", "50%")	//not really needed, since 50% is the default
-		// 		.attr("r", "50%")	//not really needed, since 50% is the default
-		// 		.selectAll("stop")
-		// 		.data([
-		// 				{offset: "0%", color: "#FF0000"},
-		// 				// {offset: "50%", color: "#FFF845"},
-		// 				// {offset: "90%", color: "#FFDA4E"},
-		// 				{offset: "100%", color: "#000000"}
-		// 			])
-		// 		.enter().append("stop")
-		// 		.attr("offset", function(d) { return d.offset; })
-		// 		.attr("stop-color", function(d) { return d.color; })
-    /////////////////////////
-
     svg.call(zoom).on('wheel', () => d3.event.preventDefault()).on("dblclick.zoom", () => {})
     this.internaldata = {
       svg,
@@ -208,17 +188,10 @@ export default {
       this.redraw()
     },
     clean () {
-      ['.row', '.axis'].forEach(selector => {
+      ['.row', '.axis','.point-color','.point-core','.point'].forEach(selector => {
         this.internaldata.svg.selectAll(selector).remove()
       })
     },
-    // zoomed (g) {
-    //   return () => {
-    //     const transform = d3.event.transform
-    //     this.$emit('zoom', {transform})
-    //     g.attr('transform', d3.event.transform)
-    //   }
-    // },
     updateChart(g) {
       this.currentTransform = d3.event.transform
       var newX = d3.event.transform.rescaleX(this.internaldata.axis_scalex)
