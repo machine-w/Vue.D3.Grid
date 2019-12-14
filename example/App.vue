@@ -225,24 +225,57 @@
                 <div class="col-sm-3">
                   <p>{{viewPoints?'是':'否'}}</p>       
                 </div> 
-              </div>               
+              </div>
 
-             
-              <button type="button" :disabled="!row_select" class="btn btn-default" @click="splitRow" data-toggle="tooltip" data-placement="top" title="clear events">
-              <i class="fa fa-trash" aria-hidden="true"></i>行分割                      
-              </button>
+              <div  v-if="draw_point" class="form-group">
+                <label for="layout-type" class="control-label col-sm-3">x</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model.number="currentPoint.x" >
+                  </div>
+              </div> 
+              <div  v-if="draw_point" class="form-group">
+                <label for="layout-type" class="control-label col-sm-3">y</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model.number="currentPoint.y" >
+                  </div>
+              </div>
+              <div  v-if="draw_point" class="form-group">
+                <label for="layout-type" class="control-label col-sm-3">radius</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model.number="currentPoint.radius" >
+                  </div>
+              </div>
+              <div  v-if="draw_point" class="form-group">
+                <label for="layout-type" class="control-label col-sm-3">core_radius</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model.number="currentPoint.core_radius" >
+                  </div>
+              </div>
+              <div v-if="draw_point" class="form-group">
+                <label for="layout-type" class="control-label col-sm-3">value</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model="currentPoint.attrs.z" >
+                  </div>
+              </div> 
+              <div  v-if="draw_point" class="form-group">
+                <label for="layout-type" class="control-label col-sm-3">color</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model="currentPoint.color" >
+                  </div>
+              </div> 
+              <div v-if="draw_point" class="form-group">
+                <label for="layout-type" class="control-label col-sm-3">core-color</label>
+                  <div  class="col-sm-9">
+                    <input  class="form-control" v-model="currentPoint.core_color" >
+                  </div>
+              </div> 
 
-              <button type="button" :disabled="!row_select" class="btn btn-default" @click="joinRow" data-toggle="tooltip" data-placement="top" title="clear events">
-              <i class="fa fa-trash" aria-hidden="true"></i>行合并                     
-              </button>
+              <div  class="form-group">
+                <button :disabled="!draw_point" type="button" class="btn btn-primary" @click="modifyPointValue" data-toggle="tooltip" data-placement="top" title="clear events">
+                  <i class="fa fa-trash" aria-hidden="true"></i>修改被选点的值                    
+                </button>
+              </div>
 
-              <button type="button" :disabled="!col_select" class="btn btn-default" @click="splitCol" data-toggle="tooltip" data-placement="top" title="clear events">
-              <i class="fa fa-trash" aria-hidden="true"></i>列分割                      
-              </button>
-
-              <button type="button" :disabled="!col_select" class="btn btn-default" @click="joinCol" data-toggle="tooltip" data-placement="top" title="clear events">
-              <i class="fa fa-trash" aria-hidden="true"></i>列合并                    
-              </button>
               
 
             </div>
@@ -301,9 +334,20 @@ export default {
       bgImg:'bg.png',
 
       viewPoints:true,
+      currentPoint:{
+          index:-1,
+          x: 0,
+          y: 0,
+          radius: 0,
+          core_radius: 0,
+          color: '',
+          core_color:'',
+          attrs:{z:10}
+          },
 
 
       eventIdex:0,
+      
     }
   },
   mounted() {
@@ -314,15 +358,15 @@ export default {
   },
   methods: {
     do (action,...args) {
-      if (this.currentLattices) {
-        this.isLoading = true
-        this.$refs['grid'][action](this.currentLattices,...args).then(() => { this.isLoading = false })
-      }
+      this.isLoading = true
+      this.$refs['grid'][action](this.currentLattices,...args).then(() => { this.isLoading = false })
     },
 
     modifyNodeValue () {
-      // this.do('modifyCurAttr',{'zone':this.v_zone,'color':this.v_color,'value':this.v_value})
       this.do('modifyCurAttr',this.v_zone,this.v_color,this.v_value)
+    },
+    modifyPointValue () {
+      this.do('modifyPointValue',this.currentPoint)
     },
     splitRow(){
       this.currentOper = null
@@ -342,9 +386,15 @@ export default {
     },
     onClick (evt) {
       // console.log(evt)
-      this.currentLattices = evt.elements
       this.currentIndex = evt.select_index
       this.currentOper = evt.oper
+      if(this.currentOper =="draw_point"){
+        this.currentPoint = evt.elements[0]
+      }else{
+        this.currentLattices = evt.elements
+      }
+      
+      
       // console.log(this.currentIndex)
       this.onEvent(evt)
     },
@@ -375,13 +425,16 @@ export default {
     col_select() {
       return (this.currentOper == 'col_select') ? true:false
     },
+    draw_point() {
+      return (this.currentOper == 'draw_point') ? true:false
+    },
     vOpacity() {
       return this.Opacity/100
     },
     vstrokeWidth() {
       return this.strokeWidth/20
     }
-  }
+  },
 }
 </script>
 

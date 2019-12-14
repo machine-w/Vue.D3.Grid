@@ -394,6 +394,19 @@ export default {
       return this.redrawIfNeeded(update)
     },
 
+    modifyPointValue(data,point,update=true){
+      // console.log(point)
+      if(!point || point.index<0 || point.index>=this.internaldata.griddata.points.length){
+        return Promise.resolve(false)
+      }
+      point.v_radius=this.internaldata.scalew(point.radius)
+      point.v_core_radius=this.internaldata.scalew(point.core_radius)
+      point.v_x = this.internaldata.scalex(point.x)
+      point.v_y = this.internaldata.scaley(point.y)
+      this.internaldata.griddata.points[point.index]={...point}
+      return this.redrawIfNeeded(update)
+    },
+
     splitRow(data,rowIndex,splitRate=0.5,update=true){
       rowIndex = parseInt(rowIndex)
       if (rowIndex == null || isNaN(rowIndex) ) {
@@ -439,7 +452,7 @@ export default {
       return this.viewBackgroud ? 'visible' : 'hidden'
     },
     pointattr(){
-      return {radius:1000,core_radius:100,color:"#ff0000",core_color:"#000000",attrs:{}}
+      return {radius:1000,core_radius:100,color:"#ff0000",core_color:"#000000",attrs:{z: 100}}
     }
   },
 

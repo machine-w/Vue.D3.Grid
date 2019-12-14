@@ -16,7 +16,7 @@ export default {
         d3.select(this).style("fill",preFill)
       })
       .on("click",function(d,i){
-        console.log(d)
+        // console.log(d)
         v.$emit('clicked', {elements: [d],oper:'draw_point',select_index:null})
       })
       //新建点
@@ -31,6 +31,7 @@ export default {
         // d3.select(this).style("fill",OverColor);
         let coords = d3.mouse(this)
         const point = {
+          index:griddata.points.length,
           x: scalex.invert(coords[0]),
           y: scaley.invert(coords[1]),
           v_x:coords[0],

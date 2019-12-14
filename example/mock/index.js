@@ -69,10 +69,7 @@ function oriGridDataRow(width,height,startx,starty,xcount,ycount){
             core_radius:randomNum(0,(width>=height?height:width) / 10),
             color:getRandomColor(),
             core_color:getRandomColor(),
-            attrs:{ z: randomNum(1,100),
-                    initHead: {zone:1,values:[1.2,1.0,3],color:getRandomColor()},
-                    initnormality: {zone:2,values:[1.2,1.0,3],color:getRandomColor()}
-                }
+            attrs:{ z: randomNum(1,100)}
             }) 
     }
     let res={grid:data,startposX:startx,startposY:starty,endposY:starty+ycount*height,endposX:startx+xcount*width,height:height,ycount:ycount,width:width,xcount:xcount,points:points}
@@ -120,16 +117,14 @@ function oriGridData(width,height,startx,starty,xcount,ycount){
     //points
     for (let i = 0; i < 100; i ++){
         points.push({
+            index: i,
             x: randomNum(startx,startx+xcount*width),
             y: randomNum(starty,starty+ycount*height),
             radius:randomNum((width>=height?height:width)/10,(width>=height?height:width)/2),
             core_radius:randomNum(0,(width>=height?height:width)/10),
             color:getRandomColor(),
             core_color:getRandomColor(),
-            attrs:{ z: randomNum(1,100),
-                    initHead: {zone:1,values:[1.2,1.0,3],color:getRandomColor()},
-                    initnormality: {zone:2,values:[1.2,1.0,3],color:getRandomColor()}
-                  }
+            attrs:{ z: randomNum(1,100)}
             }) 
     }
     let res={grid:data,startposX:startx,startposY:starty,height:height,ycount:ycount,width:width,xcount:xcount,endposY:starty+ycount*height,endposX:startx+xcount*width,points:points}
