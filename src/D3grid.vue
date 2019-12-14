@@ -16,6 +16,7 @@ import col_select from './opermode/select-col'
 import poly_select from './opermode/select-poly'
 import line_select from './opermode/select-line'
 import rect_select from './opermode/select-rect'
+import draw_point from './opermode/draw_point'
 import {rowSplit,rowJoin,columnJoin,columnSplit} from './util/editgrid'
 
 
@@ -28,7 +29,8 @@ const oper_mode = {
   col_select,
   poly_select,
   line_select,
-  rect_select
+  rect_select,
+  draw_point
 }
 
 const props = {
@@ -148,10 +150,30 @@ export default {
     let brusher=svg.append("g").attr("class", "brush")
     let rectbrusher=svg.append("g").attr("class", "brush")
         // .attr("class", "clip")
-    var zoom = d3.zoom()
+    let zoom = d3.zoom()
       .scaleExtent([.1, 100])  // This control how much you can unzoom (x0.5) and zoom (x20)
       .extent([[0, 0], [size.width, size.height]])
       .on("zoom", this.updateChart);
+
+    /////////////////////////point color
+    // let gradientPoint = svg.append("defs").append("radialGradient")
+
+    //     gradientPoint
+    //     .attr("id", "gradient")
+		// 		.attr("cx", "50%")	//not really needed, since 50% is the default
+		// 		.attr("cy", "50%")	//not really needed, since 50% is the default
+		// 		.attr("r", "50%")	//not really needed, since 50% is the default
+		// 		.selectAll("stop")
+		// 		.data([
+		// 				{offset: "0%", color: "#FF0000"},
+		// 				// {offset: "50%", color: "#FFF845"},
+		// 				// {offset: "90%", color: "#FFDA4E"},
+		// 				{offset: "100%", color: "#000000"}
+		// 			])
+		// 		.enter().append("stop")
+		// 		.attr("offset", function(d) { return d.offset; })
+		// 		.attr("stop-color", function(d) { return d.color; })
+    /////////////////////////
 
     svg.call(zoom).on('wheel', () => d3.event.preventDefault()).on("dblclick.zoom", () => {})
     this.internaldata = {
@@ -206,6 +228,12 @@ export default {
       this.internaldata.yAxis.call(d3.axisLeft(newY))
       this.internaldata.svg
         .selectAll(".row")
+        .attr('transform', d3.event.transform)
+      this.internaldata.svg
+        .selectAll(".point")
+        .attr('transform', d3.event.transform)
+      this.internaldata.svg
+        .selectAll(".point-core")
         .attr('transform', d3.event.transform)
       this.internaldata.svg
         .selectAll(".brush")
