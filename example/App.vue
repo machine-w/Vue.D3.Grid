@@ -178,8 +178,8 @@
               </div>
 
               <div class="form-group">
-                <label for="useSecondValue" class="control-label col-sm-6">合并时属性取后一行（列）</label>
-                <div class="col-sm-3">
+                <label for="useSecondValue" class="control-label col-sm-7">合并时属性取后一行（列）</label>
+                <div class="col-sm-2">
                   <input type="checkbox" id="useSecondValue" v-model="useSecondValue">
                 </div>
                 <div class="col-sm-3">
@@ -261,8 +261,8 @@
       <div class="panel panel-default">
           <div class="panel-heading">当前节点</div>
           <div class="panel-body log">
-            <div v-for="e in events" :key="e.oper">
-              <p><b>数据:</b> {{e.data}} <b>当前操作:</b>{{e.oper}}</p>
+            <div v-for="e in events" :key="e.id">
+              <p><b>({{e.id}})->数据:</b> {{e.data}} <b>当前操作:</b>{{e.oper}}</p>
             </div>
           </div>
       </div>
@@ -301,6 +301,9 @@ export default {
       bgImg:'bg.png',
 
       viewPoints:true,
+
+
+      eventIdex:0,
     }
   },
   mounted() {
@@ -346,7 +349,7 @@ export default {
       this.onEvent(evt)
     },
     onEvent (data) {
-      this.events.push({data:data.elements, oper: data.oper})
+      this.events.push({data:data.elements, oper: data.oper,id:this.eventIdex++})
       // console.log({eventName, data: data.oper})
     },
 

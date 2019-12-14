@@ -7,7 +7,7 @@ export default {
       let pointattr = v.pointattr
       let preFill=OverColor
       //选择点
-      svg.selectAll(".point,.point_core")
+      svg.selectAll(".point,.point-core")
       .on('mouseover', function(d,i) {
         preFill=d3.select(this).style('fill')
         d3.select(this).style("fill","FF6666")
@@ -43,7 +43,7 @@ export default {
           core_color:pointattr.core_color,
           attrs:pointattr.attrs
           }
-        drawCircle(scatter,coords[0], coords[1], point.v_radius,point.v_core_radius,pointattr.color,pointattr.core_color,v.Opacity)
+        drawCircle(scatter,point,v.Opacity)
         griddata.points.push(point)
         svg.call(zoom.transform, d3.zoomIdentity.translate(v.currentTransform.x, v.currentTransform.y).scale(v.currentTransform.k))
         // d3.select(this).style("fill",OverColor);

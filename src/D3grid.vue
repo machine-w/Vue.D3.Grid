@@ -343,7 +343,7 @@ export default {
 
         if(this.viewPoints){
           for (const point of griddata.points) {
-            drawCircle(scatter,point.v_x,point.v_y,point.v_radius,point.v_core_radius,point.color,point.core_color,this.Opacity)
+            drawCircle(scatter,point,this.Opacity)
           }
         }
         //更新操作
@@ -360,7 +360,7 @@ export default {
           this.internaldata.rectbrusher.call(d3.brush().clear)
           this.internaldata.rectbrusher.selectAll('*').remove()
         }
-        this.internaldata.svg.selectAll(".point,.point_core")
+        this.internaldata.svg.selectAll(".point,.point-core")
           .on('mouseover', null)
           .on("mouseout",null)
           .on("click",null)
