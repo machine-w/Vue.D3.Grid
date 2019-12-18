@@ -414,6 +414,7 @@ export default {
         return Promise.resolve(false)
       }
       rowSplit(this.internaldata.griddata.grid,rowIndex,splitRate)
+      this.internaldata.griddata.ycount=this.internaldata.griddata.grid.length
       return this.redrawIfNeeded(update)
     },
     joinRow(data,rowIndex,useSecondValue=false,update=true){
@@ -422,6 +423,7 @@ export default {
         return Promise.resolve(false)
       }
       rowJoin(this.internaldata.griddata.grid,rowIndex,useSecondValue)
+      this.internaldata.griddata.ycount=this.internaldata.griddata.grid.length
       return this.redrawIfNeeded(update)
     },
     splitCol(data,colIndex,splitRate=0.5,update=true){
@@ -430,6 +432,10 @@ export default {
         return Promise.resolve(false)
       }
       columnSplit(this.internaldata.griddata.grid,colIndex,splitRate)
+      if(this.internaldata.griddata.grid.length>0){
+        this.internaldata.griddata.xcount=this.internaldata.griddata.grid[0].length
+      }
+      
       return this.redrawIfNeeded(update)
     },
     joinCol(data,colIndex,useSecondValue=false,update=true){
@@ -438,6 +444,9 @@ export default {
         return Promise.resolve(false)
       }
       columnJoin(this.internaldata.griddata.grid,colIndex,useSecondValue)
+      if(this.internaldata.griddata.grid.length>0){
+        this.internaldata.griddata.xcount=this.internaldata.griddata.grid[0].length
+      }
       return this.redrawIfNeeded(update)
     },
   },
