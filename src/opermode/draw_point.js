@@ -17,7 +17,7 @@ export default {
       })
       .on("click",function(d,i){
         // console.log(d)
-        v.$emit('clicked', {elements: [d],oper:'draw_point',select_index:null})
+        v.$emit('clicked', {Points: [d],oper:'draw_point',select_index:null})
       })
       //新建点
       v.internaldata.cells
@@ -49,7 +49,7 @@ export default {
         svg.call(zoom.transform, d3.zoomIdentity.translate(v.currentTransform.x, v.currentTransform.y).scale(v.currentTransform.k))
         // d3.select(this).style("fill",OverColor);
         v.updateOper()
-        v.$emit('clicked', {elements: [point],oper:'draw_point',select_index:null})
+        v.$emit('clicked', {Points: [point],oper:'draw_point',select_index:null})
       })
   }
 }

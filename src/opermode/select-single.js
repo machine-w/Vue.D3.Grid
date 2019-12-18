@@ -10,7 +10,7 @@ export default {
       })
       .on("click",function(d,i){
         d3.select(this).style("fill","#ff6666").style("stroke", "#f00").transition().style("fill",OverColor).style("stroke", "#222")
-        v.$emit('clicked', {elements: [d],oper:'single_select',select_index:null})
+        v.$emit('clicked', {Lattices: [d],Points: [],oper:'single_select',select_index:null})
         // d3.select(this).transition().style("fill",d.attrs[v.currentAttr].color);
       });
   }

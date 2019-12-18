@@ -78,10 +78,15 @@ const props = {
     type: Boolean,
     default: true
   },
+  selectPoints:{
+    type: Boolean,
+    default: true
+  },
   bgImg: {
     type: String,
     default: 'bg.png'
   },
+
 }
 
 const directives = {
@@ -503,6 +508,11 @@ export default {
     viewPoints (current, old) {
       this.redraw()
     },
+    selectPoints (current, old) {
+      if (!current){
+        this.internaldata.scatter.selectAll(".pselected").classed("pselected", false)
+      }
+    },
   }
 }
 </script>
@@ -529,6 +539,12 @@ export default {
     fill: steelblue !important;
     /* fill-opacity: 0.4; */
     stroke: #111;
+    /* stroke-opacity: 0.5; */
+}
+.pselected {
+    fill: #FF6666 !important;
+    /* fill-opacity: 0.4; */
+    /* stroke: #111; */
     /* stroke-opacity: 0.5; */
 }
 .bgimg{

@@ -91,6 +91,16 @@
               </div>
 
               <div class="form-group">
+                <label for="selectPoints" class="control-label col-sm-5">是否选择点</label>
+                <div class="col-sm-4">
+                  <input type="checkbox" id="selectPoints" v-model="selectPoints">
+                </div>
+                <div class="col-sm-3">
+                  <p>{{selectPoints?'是':'否'}}</p>       
+                </div> 
+              </div>
+
+              <div class="form-group">
                 <label for="viewBackgroud" class="control-label col-sm-5">是否显示背景图片</label>
                 <div class="col-sm-4">
                   <input type="checkbox" id="viewBackgroud" v-model="viewBackgroud">
@@ -109,9 +119,12 @@
                   </div>
               </div>         
 
-
               <div class="form-group">
-                <span v-if="currentLattices">当前选择节点数量： {{currentLattices.length}}</span>
+                <span v-if="currentLattices">当前选择网格数量： {{currentLattices.length}}</span>
+                <span v-else>无选择网格</span>
+              </div>
+              <div class="form-group">
+                <span v-if="currentPoints && currentPoints.length != 0">当前选择点数量： {{currentPoints.length}}</span>
                 <span v-else>无选择节点</span>
                 <i v-if="isLoading" class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
               </div>
@@ -325,7 +338,7 @@
 
     </div>
     <div class="col-md-8 panel panel-default">
-      <D3grid ref="grid" class="grid" :pointattr="createPoint" :viewPoints="viewPoints" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
+      <D3grid ref="grid" class="grid" :selectPoints="selectPoints" :pointattr="createPoint" :viewPoints="viewPoints" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
        @clicked="onClick" ></D3grid>
     </div>
     <div class="col-md-2">
@@ -357,6 +370,7 @@ export default {
       Opacity: 50,
       strokeWidth:20,
       currentLattices: null,
+      currentPoints: null,
       currentIndex:null,
       currentOper:null,
       isLoading: false,
@@ -373,6 +387,7 @@ export default {
       bgImg:'bg.png',
 
       viewPoints:true,
+      selectPoints:true,
       createPoint:{radius:5,core_radius:1,color:"#ff0000",core_color:"#000000",attrs:{z: 100}},//半径为虚拟半径
       currentPoint:{
           index:-1,
@@ -429,9 +444,10 @@ export default {
       this.currentIndex = evt.select_index
       this.currentOper = evt.oper
       if(this.currentOper =="draw_point"){
-        this.currentPoint = evt.elements[0]
+        this.currentPoint = evt.Points[0]
       }else{
-        this.currentLattices = evt.elements
+        this.currentLattices = evt.Lattices
+        this.currentPoints = evt.Points
       }
       
       
@@ -439,7 +455,8 @@ export default {
       this.onEvent(evt)
     },
     onEvent (data) {
-      this.events.push({data:data.elements, oper: data.oper,id:this.eventIdex++})
+        this.events.push({data:data.Points, oper: data.oper,id:this.eventIdex++})
+        this.events.push({data:data.Lattices, oper: data.oper,id:this.eventIdex++})
       // console.log({eventName, data: data.oper})
     },
 
