@@ -9,8 +9,8 @@
                 <label for="type" class="control-label col-sm-3">查看属性</label>
                   <div  class="col-sm-9">
                     <select id="type" class="form-control" v-model="viewAttr">
-                      <option value="initHead">初始水头</option>
-                      <option value="initnormality">初始浓度</option>
+                      <option value="initHead">参数1</option>
+                      <option value="initnormality">参数2</option>
                     </select>
                   </div>
               </div>
@@ -324,15 +324,7 @@
                   <i class="fa fa-trash" aria-hidden="true"></i>修改被选点的值                    
                 </button>
               </div>
-
-
-
-              
-
-            </div>
-            
-
-            
+            </div>         
           </div>
       </div>
 
