@@ -373,7 +373,7 @@ export default {
       bgImg:'bg.png',
 
       viewPoints:true,
-      createPoint:{radius:1000,core_radius:100,color:"#ff0000",core_color:"#000000",attrs:{z: 100}},
+      createPoint:{radius:5,core_radius:1,color:"#ff0000",core_color:"#000000",attrs:{z: 100}},//半径为虚拟半径
       currentPoint:{
           index:-1,
           x: 0,

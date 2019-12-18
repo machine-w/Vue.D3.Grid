@@ -32,14 +32,14 @@ export default {
         let coords = d3.mouse(this)
         const point = {
           index:griddata.points.length,
-          x: scalex.invert(coords[0]),
-          y: scaley.invert(coords[1]),
           v_x:coords[0],
           v_y:coords[1],
-          v_radius:scalew(pointattr.radius),
-          v_core_radius:scalew(pointattr.core_radius),
-          radius:pointattr.radius,
-          core_radius:pointattr.core_radius,
+          v_radius:pointattr.radius,
+          v_core_radius:pointattr.core_radius,
+          x: scalex.invert(coords[0]),
+          y: scaley.invert(coords[1]),
+          radius:scalew.invert(pointattr.radius),
+          core_radius:scalew.invert(pointattr.core_radius),
           color:pointattr.color,
           core_color:pointattr.core_color,
           attrs:{...pointattr.attrs}
