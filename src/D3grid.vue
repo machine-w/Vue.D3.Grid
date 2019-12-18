@@ -95,6 +95,7 @@ const directives = {
 
 
 export default {
+  name: 'D3Grid',
   props,
   directives,
   data () {

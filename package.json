@@ -1,10 +1,22 @@
 {
-  "name": "vue_d3_grid",
+  "name": "vued3grid",
   "version": "0.1.0",
-  "private": true,
+  "description": "D3 grid components for vue",
+  "author": "machine <steve2008.ma@gmail.com>",
+  "main": "lib/vued3grid.umd.min.js",
+  "private": false,
+  "keywords": [
+    "vue",
+    "vuejs",
+    "grid",
+    "D3.js",
+    "lattice",
+    "web-components"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "lib": "vue-cli-service build --target lib --name vued3grid --dest lib src/index.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -29,6 +41,15 @@
     "vue-loader": "^10.0.0",
     "vue-pretty-logger": "^0.9.0",
     "vue-template-compiler": "^2.6.10"
+  },
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/machine-w/Vue.D3.Grid.git"
   },
   "eslintConfig": {
     "root": true,

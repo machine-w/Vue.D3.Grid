@@ -338,8 +338,8 @@
 
     </div>
     <div class="col-md-8 panel panel-default">
-      <D3grid ref="grid" class="grid" :selectPoints="selectPoints" :pointattr="createPoint" :viewPoints="viewPoints" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
-       @clicked="onClick" ></D3grid>
+      <D3Grid ref="grid" class="grid" :selectPoints="selectPoints" :pointattr="createPoint" :viewPoints="viewPoints" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
+       @clicked="onClick" ></D3Grid>
     </div>
     <div class="col-md-2">
       <div class="panel panel-default">
@@ -356,7 +356,7 @@
 
 <script>
 import axios from "axios"
-import D3grid from '../src/D3grid'
+// import D3grid from '../src/D3grid'
 // import draw_point from '../src/opermode/draw_point'
 export default {
   name: 'app',
@@ -408,9 +408,9 @@ export default {
   mounted() {
       this.getAllOrders()
   },
-  components: {
-    D3grid
-  },
+  // components: {
+  //   D3grid
+  // },
   methods: {
     do (action,...args) {
       this.isLoading = true
