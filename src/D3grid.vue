@@ -347,19 +347,21 @@ export default {
         .enter()
         .append("rect")
         .attr("class", "square")
-        .attr("x", function(d) { return d.v_x; })
-        .attr("y", function(d) { return d.v_y; })
-        .attr("xindex", function(d) { return d.xindex; })
-        .attr("yindex", function(d) { return d.yindex; })
-        .attr("width", function(d) { return d.v_width; })
-        .attr("height", function(d) { return d.v_height; })
-        .style("fill", function(d) { return d.attrs[curAttr].color; })
+        .attr("x", function(d) { return d.v_x })
+        .attr("y", function(d) { return d.v_y })
+        .attr("xindex", function(d) { return d.xindex })
+        .attr("yindex", function(d) { return d.yindex })
+        .attr("width", function(d) { return d.v_width })
+        .attr("height", function(d) { return d.v_height })
+        .style("fill", function(d) { return d.attrs[curAttr].color })
         .style("stroke", "#222")
 
-        if(this.gridVisible == 2){
+        if(this.gridVisible > 0){
           this.internaldata.cells.classed("invalid",function(d) { return d.invalid })
-        }else if(this.gridVisible == 1){
+          // this.internaldata.cells.filter(function(d) { return d.invalid }).style("fill","red")
+          if(this.gridVisible == 1){
           this.internaldata.cells.filter(function(d) { return d.invalid }).attr("visibility", "hidden")
+          }
         }
 
         if(this.viewPoints){
@@ -553,6 +555,12 @@ export default {
     stroke: #222;
     /* stroke-opacity: 0.5; */
 }
+.invalid {
+    fill: #cccccc !important;
+    /* fill-opacity: 0.4; */
+    stroke: #ffffff;
+    /* stroke-opacity: 0.5; */
+}
 .selected {
     fill: steelblue !important;
     /* fill-opacity: 0.4; */
@@ -565,12 +573,7 @@ export default {
     /* stroke: #111; */
     /* stroke-opacity: 0.5; */
 }
-.invalid {
-    fill: #cccccc !important;
-    /* fill-opacity: 0.4; */
-    stroke: #ffffff;
-    /* stroke-opacity: 0.5; */
-}
+
 .bgimg{
   object-fit: fill;
 }
