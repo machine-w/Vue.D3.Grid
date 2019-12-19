@@ -27,7 +27,12 @@ export default {
         .on("end", function() {
             let ds=[]
             let ps =[]
-            scatter.selectAll(".selected").each(function(d, i) {ds.push(d)})
+            if(v.reverseSelect){
+                scatter.selectAll("*:not(.selected).square").each(function(d, i) {ds.push(d)})         
+            }else{
+                scatter.selectAll(".selected").each(function(d, i) {ds.push(d)})
+            }
+            // scatter.selectAll(".selected").each(function(d, i) {ds.push(d)})
             if(v.selectPoints) scatter.selectAll(".pselected").each(function(d, i) {ps.push(d)})
             v.$emit('clicked', {Lattices: ds,Points: ps, oper:'rect_select',select_index:null})
 		})

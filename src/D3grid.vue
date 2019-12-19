@@ -90,6 +90,10 @@ const props = {
     type: String,
     default: 'bg.png'
   },
+  reverseSelect:{ //poly,line,rect reverse select 
+    type: Boolean,
+    default: false
+  },
 
 }
 

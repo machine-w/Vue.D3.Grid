@@ -120,6 +120,16 @@
                   <p>{{viewBackgroud?'是':'否'}}</p>       
                 </div> 
               </div>
+            
+              <div class="form-group">
+                <label for="reverseSelect" class="control-label col-sm-5">是否反向选择</label>
+                <div class="col-sm-4">
+                  <input type="checkbox" id="reverseSelect" v-model="reverseSelect">
+                </div>
+                <div class="col-sm-3">
+                  <p>{{reverseSelect?'是':'否'}}</p>       
+                </div> 
+              </div>
 
 
 
@@ -341,7 +351,7 @@
 
     </div>
     <div class="col-md-8 panel panel-default">
-      <D3Grid ref="grid" class="grid" :gridVisible="gridVisible" :selectPoints="selectPoints" :pointattr="createPoint" :viewPoints="viewPoints" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
+      <D3Grid ref="grid" class="grid" :reverseSelect="reverseSelect" :gridVisible="gridVisible" :selectPoints="selectPoints" :pointattr="createPoint" :viewPoints="viewPoints" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
        @clicked="onClick" ></D3Grid>
     </div>
     <div class="col-md-1">
@@ -391,6 +401,7 @@ export default {
       gridVisible:2,
       viewPoints:true,
       selectPoints:true,
+      reverseSelect:false,
       createPoint:{radius:5,core_radius:1,color:"#ff0000",core_color:"#000000",attrs:{z: 100}},//半径为虚拟半径
       currentPoint:{
           index:-1,
