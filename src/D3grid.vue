@@ -82,6 +82,10 @@ const props = {
     type: Boolean,
     default: true
   },
+  gridVisible:{
+    type: Number,
+    default: 2
+  },
   bgImg: {
     type: String,
     default: 'bg.png'
@@ -348,6 +352,12 @@ export default {
         .style("fill", function(d) { return d.attrs[curAttr].color; })
         .style("stroke", "#222")
 
+        if(this.gridVisible == 2){
+          this.internaldata.cells.classed("invalid",function(d) { return d.invalid })
+        }else if(this.gridVisible == 1){
+          this.internaldata.cells.filter(function(d) { return d.invalid }).attr("visibility", "hidden")
+        }
+
         if(this.viewPoints){
           for (const point of griddata.points) {
             drawCircle(scatter,point,this.Opacity)
@@ -514,6 +524,9 @@ export default {
         this.internaldata.scatter.selectAll(".pselected").classed("pselected", false)
       }
     },
+    gridVisible(current, old){
+      this.redraw()
+    }
   }
 }
 </script>
@@ -546,6 +559,12 @@ export default {
     fill: #FF6666 !important;
     /* fill-opacity: 0.4; */
     /* stroke: #111; */
+    /* stroke-opacity: 0.5; */
+}
+.invalid {
+    fill: #cccccc !important;
+    /* fill-opacity: 0.4; */
+    stroke: #ffffff;
     /* stroke-opacity: 0.5; */
 }
 .bgimg{

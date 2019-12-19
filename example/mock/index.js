@@ -32,7 +32,6 @@ function oriGridDataRow(width,height,startx,starty,xcount,ycount){
 
     //iterate for cells/columns inside rows
     for (let column = 0; column < xcount; column ++){
-        
         data[row].push({
         xindex:row,
         yindex:column,
@@ -40,7 +39,7 @@ function oriGridDataRow(width,height,startx,starty,xcount,ycount){
         y: randomNum(ypos-30,ypos+30),
         width: width,
         height: height,
-        click: 0,
+        invalid: Math.random() >= 0.5,
         attrs:{initHead:{zone:1,values:[1.2,1.0,3],color:getRandomColor()},
                initnormality:{zone:2,values:[1.2,1.0,3],color:getRandomColor()}
               }
@@ -69,6 +68,7 @@ function oriGridDataRow(width,height,startx,starty,xcount,ycount){
             core_radius:randomNum(0,(width>=height?height:width) / 10),
             color:getRandomColor(),
             core_color:getRandomColor(),
+            invalid: Math.random() >= 0.5,
             attrs:{ z: randomNum(1,100)}
             }) 
     }
@@ -99,6 +99,7 @@ function oriGridData(width,height,startx,starty,xcount,ycount){
         y: ypos,
         width: width,
         height: height,
+        invalid: Math.random() >= 0.5,
         attrs:{initHead:{zone:1,values:[1.2,1.0,3],color:getRandomColor()},
                initnormality:{zone:2,values:[1.2,1.0,3],color:getRandomColor()}
               }
@@ -124,6 +125,7 @@ function oriGridData(width,height,startx,starty,xcount,ycount){
             core_radius:randomNum(0,(width>=height?height:width)/10),
             color:getRandomColor(),
             core_color:getRandomColor(),
+            invalid: Math.random() >= 0.5,
             attrs:{ z: randomNum(1,100)}
             }) 
     }

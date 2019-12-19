@@ -1,6 +1,6 @@
 <template>
    <div id="app" class="container-fluid">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="panel panel-default">
         <div class="panel-heading">基础控制</div>
         <div class="panel-body">
@@ -26,6 +26,17 @@
                       <option value="line_select">线形选择</option>
                       <option value="rect_select">矩形选择</option>
                       <option value="draw_point">画点</option>
+                    </select>       
+                  </div>
+              </div>
+
+              <div class="form-group">
+                <label for="gridVisible" class="control-label col-sm-3">查看无效网格</label>
+                  <div  class="col-sm-9">
+                    <select id="gridVisible" class="form-control" v-model="gridVisible">
+                      <option value="0">不处理</option>
+                      <option value="1">不显示</option>
+                      <option value="2">灰色显示</option>
                     </select>       
                   </div>
               </div>
@@ -330,10 +341,10 @@
 
     </div>
     <div class="col-md-8 panel panel-default">
-      <D3Grid ref="grid" class="grid" :selectPoints="selectPoints" :pointattr="createPoint" :viewPoints="viewPoints" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
+      <D3Grid ref="grid" class="grid" :gridVisible="gridVisible" :selectPoints="selectPoints" :pointattr="createPoint" :viewPoints="viewPoints" :bgImg="bgImg" :viewBackgroud="viewBackgroud" :strokeWidth="vstrokeWidth" :Opacity="vOpacity" :operMode="operMode" :viewAttr="viewAttr" :marginX="Marginx" :marginY="Marginy" :data="griddata" :latticeWidth="latticeWidth"
        @clicked="onClick" ></D3Grid>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-1">
       <div class="panel panel-default">
           <div class="panel-heading">当前节点</div>
           <div class="panel-body log">
@@ -377,7 +388,7 @@ export default {
       useSecondValue:false,
       viewBackgroud:true,
       bgImg:'bg.png',
-
+      gridVisible:2,
       viewPoints:true,
       selectPoints:true,
       createPoint:{radius:5,core_radius:1,color:"#ff0000",core_color:"#000000",attrs:{z: 100}},//半径为虚拟半径
@@ -393,7 +404,7 @@ export default {
           },
 
 
-      eventIdex:0,
+      eventIndex:0,
       
     }
   },
@@ -447,8 +458,8 @@ export default {
       this.onEvent(evt)
     },
     onEvent (data) {
-        this.events.push({data:data.Points, oper: data.oper,id:this.eventIdex++})
-        this.events.push({data:data.Lattices, oper: data.oper,id:this.eventIdex++})
+        this.events.push({data:data.Points, oper: data.oper,id:this.eventIndex++})
+        this.events.push({data:data.Lattices, oper: data.oper,id:this.eventIndex++})
       // console.log({eventName, data: data.oper})
     },
 
