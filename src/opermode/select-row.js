@@ -2,70 +2,45 @@ import { OverColor } from ".";
 import * as d3 from 'd3'
 export default {
   callOper (v,d3) {
+    let {cells,row} = v.internaldata
     let selectedIndex=null
-    v.internaldata.cells.on('mouseover', function(d,i) {
-        let curIndex = d3.select(this).attr("xindex");
-        v.internaldata.cells.filter(function(d1,i1){
-          if(d1.xindex == curIndex){
+    cells.on('mouseover', function(d,i) {
+        let curIndex = d3.select(this).attr("xindex")
+        cells.classed('selected',function(d1,i1){
+          if(d1.xindex == curIndex || selectedIndex == d1.xindex){
             return true
           }
           else{
             return false
           }
         })
-        // .transition()
-        .style("fill",OverColor)
       })
-      .on("mouseout",function(d,i){
-        // console.log(selectedIndex)
-        let curIndex = d3.select(this).attr("xindex");
-        if (selectedIndex == null || selectedIndex != curIndex){
-          v.internaldata.cells
-          .filter(function(d2,i1){
-            if(d2.xindex == curIndex){
-              return true;
-            }
-            else{
-              return false;
-            }
-          })
-          .transition()
-          .each(function(d, i) {
-            d3.select(this).style("fill",d.attrs[v.currentAttr].color)})
-        }
-        
-      })
+      // .on("mouseout",function(d,i){
+      // })
       .on("click",function(d,i){
         let ds=[]
+        let querystr=''
         let curIndex = d3.select(this).attr("xindex");
         if (selectedIndex != curIndex ){
-          if (selectedIndex != null){
-            v.internaldata.cells
-            .filter(function(d2,i1){
-              if(d2.xindex == selectedIndex){
-                return true;
-              }
-              else{
-                return false;
-              }
-            })
-            .transition()
-            .each(function(d, i) {
-              d3.select(this).style("fill",d.attrs[v.currentAttr].color)})
-          }
+          cells.classed('selected',function(d1,i1){
+            if(curIndex == d1.xindex){
+              return true
+            }else{
+              return false
+            }
+          })
           selectedIndex = curIndex
         }
-        v.internaldata.cells
-        .filter(function(d2,i2){
-          if(d2.xindex == curIndex){
-            return true;
-          }
-          else{
-            return false;
-          }
-        })
-        .each(function(d, i) {ds.push(d)})
-          v.$emit('clicked', {Lattices: ds,Points: [], oper:'row_select',select_index:curIndex})
+        if(v.reverseSelect){
+            querystr="*:not(.selected)"
+        }else{
+            querystr=".selected"
+        }
+        if(v.gridVisible == 1){
+            querystr +=":not(.invalid)"
+        }
+        row.selectAll(querystr).each(function(d, i) {ds.push(d)})
+        v.$emit('clicked', {Lattices: ds,Points: [], oper:'row_select',select_index:curIndex})
       });
   }
 }

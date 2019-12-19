@@ -33,7 +33,7 @@
               <div class="form-group">
                 <label for="gridVisible" class="control-label col-sm-3">查看无效网格</label>
                   <div  class="col-sm-9">
-                    <select id="gridVisible" class="form-control" v-model="gridVisible">
+                    <select id="gridVisible" class="form-control" v-model.number="gridVisible">
                       <option value="0">不处理</option>
                       <option value="1">不显示</option>
                       <option value="2">灰色显示</option>
