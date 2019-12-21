@@ -41,6 +41,7 @@ View the file in folder "example" and modify main.js file to :
 ```js
 
 import D3grid from 'vued3grid'
+import Css from 'vued3grid/lib/vued3grid.css'
 Vue.use(D3grid)
 
 ```
