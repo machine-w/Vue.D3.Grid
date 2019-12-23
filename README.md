@@ -13,6 +13,10 @@ Vue components to display  grid based on [D3.js](https://d3js.org/) layout.
 
 ![demo](./documents/demo.gif)
 
+# Live demo
+
+[ LIVE DEMO ](http://121.36.62.6:8080/index.html)
+
 
 # Installation
 - Available through:
