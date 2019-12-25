@@ -197,7 +197,13 @@
 
                <div class="form-group">
                 <button type="button" class="btn btn-primary" @click="modifyNodeValue" data-toggle="tooltip" data-placement="top" title="clear events">
-                <i class="fa fa-trash" aria-hidden="true"></i>修改被选择节点值                      
+                修改节点值                      
+                </button>
+                <button type="button" class="btn btn-warning" @click="modifyNodeValid" data-toggle="tooltip" data-placement="top" title="clear events">
+               修改节点为有效                   
+                </button>
+                <button type="button" class="btn btn-default" @click="modifyNodeInvalid" data-toggle="tooltip" data-placement="top" title="clear events">
+                修改节点为无效                   
                 </button>
                </div>
 
@@ -433,6 +439,12 @@ export default {
 
     modifyNodeValue () {
       this.do('modifyCurAttr',this.v_zone,this.v_color,this.v_value)
+    },
+    modifyNodeInvalid () {
+      this.do('modifyCurInvalid')
+    },
+    modifyNodeValid () {
+      this.do('modifyCurValid')
     },
     modifyPointValue () {
       this.do('modifyPointValue',this.currentPoint)

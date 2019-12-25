@@ -418,6 +418,24 @@ export default {
       this.updateColor()
       return this.redrawIfNeeded(update)
     },
+    modifyCurInvalid(data,update=true){
+      if (!data) {
+        return Promise.resolve(false)
+      }
+      data.forEach(element => {
+        element.invalid=true
+      })
+      return this.redrawIfNeeded(update)
+    },
+    modifyCurValid(data,update=true){
+      if (!data) {
+        return Promise.resolve(false)
+      }
+      data.forEach(element => {
+        element.invalid=false
+      })
+      return this.redrawIfNeeded(update)
+    },
 
     modifyPointValue(data,point,update=true){
       // console.log(point)
