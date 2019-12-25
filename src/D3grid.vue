@@ -292,6 +292,8 @@ export default {
         .attr("width",griddata.endX-griddata.startX)
         .attr("height",griddata.endY-griddata.startY)
         .attr("visibility", this.visibilityBg)
+        .attr("x", griddata.startX)
+        .attr("y", griddata.startY)
       // console.log(griddata.startX,griddata.endX,griddata.startposX,griddata.endposX,this.internaldata.scalex(griddata.startposX))
       this.redraw()
     },
