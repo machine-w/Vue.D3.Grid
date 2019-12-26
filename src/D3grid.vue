@@ -51,9 +51,9 @@ const props = {
   viewAttr: {
     type: String,
     default: 'initHead',
-    validator (value) {
-      return ATTRS.indexOf(value) !== -1
-    }
+    // validator (value) {
+    //   return ATTRS.indexOf(value) !== -1
+    // }
   },
   operMode: {
     type: String,
@@ -412,7 +412,9 @@ export default {
       }
       data.forEach(element => {
         element.attrs[this.currentAttr].color=color
-        element.attrs[this.currentAttr].values={...value} //shallow copy need to fix
+        if(value != null){
+          element.attrs[this.currentAttr].values={...value} //shallow copy need to fix
+        }
         element.attrs[this.currentAttr].zone=zone
       })
       this.updateColor()
