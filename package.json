@@ -1,6 +1,6 @@
 {
   "name": "vued3grid",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "D3 grid components for vue",
   "author": "machine <steve2008.ma@gmail.com>",
   "main": "lib/vued3grid.umd.min.js",
