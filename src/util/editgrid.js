@@ -62,6 +62,7 @@ export function rowJoin(griddata, rowindex,useSecondValue=false) {
           column.v_height += griddata[rowindex + 1][i].v_height
           if(useSecondValue){
             column.attrs = {...griddata[rowindex + 1][i].attrs}
+            column.invalid=griddata[rowindex + 1][i].invalid
           }
           
         })
@@ -84,6 +85,7 @@ export function columnJoin(griddata, columindex,useSecondValue=false) {
             row[columindex].v_width += row[columindex + 1].v_width
             if(useSecondValue){
                 row[columindex].attrs = {...row[columindex + 1].attrs}
+                row[columindex].invalid = row[columindex + 1].invalid
             }
             
             for (let index = columindex + 2; index < row.length; index++) {

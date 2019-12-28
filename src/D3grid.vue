@@ -50,7 +50,7 @@ const props = {
   },
   viewAttr: {
     type: String,
-    default: 'initHead',
+    default: '',
     // validator (value) {
     //   return ATTRS.indexOf(value) !== -1
     // }
