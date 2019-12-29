@@ -399,7 +399,7 @@ export default {
       let that = this
       let {row,cells,griddata,scatter} = this.internaldata
       scatter.selectAll(".selected").classed("selected", false)
-      if (that.currentAttr){
+      if (that.currentAttr && d.attrs[that.currentAttr]){
         cells.data(function(d) {return d}).style("fill", function(d) { return d.attrs[that.currentAttr].color })
       }else{
         cells.data(function(d) {return d}).style("fill", "#ffffff")//默认白色
