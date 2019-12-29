@@ -213,27 +213,29 @@ export default {
     },
     updateChart(g) {
       this.currentTransform = d3.event.transform
-      var newX = d3.event.transform.rescaleX(this.internaldata.axis_scalex)
-      var newY = d3.event.transform.rescaleY(this.internaldata.axis_scaley)
-      // update axes with these new boundaries
-      this.internaldata.xAxis.call(d3.axisTop(newX))
-      this.internaldata.yAxis.call(d3.axisLeft(newY))
-      this.internaldata.svg
-        .selectAll(".row")
-        .attr('transform', d3.event.transform)
-      this.internaldata.svg
-        .selectAll(".point")
-        .attr('transform', d3.event.transform)
-      this.internaldata.svg
-        .selectAll(".point-core")
-        .attr('transform', d3.event.transform)
-      this.internaldata.svg
-        .selectAll(".brush")
-        .attr('transform', d3.event.transform)
-        .each(function(d, i) {
-          d3.select(this).selectAll('.extent,.selection').style("stroke-width",2.5/d3.event.transform.k)
-        })
-      this.internaldata.bgrect.attr('transform', d3.event.transform)
+      if(this.currentTransform){
+        var newX = d3.event.transform.rescaleX(this.internaldata.axis_scalex)
+        var newY = d3.event.transform.rescaleY(this.internaldata.axis_scaley)
+        // update axes with these new boundaries
+        this.internaldata.xAxis.call(d3.axisTop(newX))
+        this.internaldata.yAxis.call(d3.axisLeft(newY))
+        this.internaldata.svg
+          .selectAll(".row")
+          .attr('transform', d3.event.transform)
+        this.internaldata.svg
+          .selectAll(".point")
+          .attr('transform', d3.event.transform)
+        this.internaldata.svg
+          .selectAll(".point-core")
+          .attr('transform', d3.event.transform)
+        this.internaldata.svg
+          .selectAll(".brush")
+          .attr('transform', d3.event.transform)
+          .each(function(d, i) {
+            d3.select(this).selectAll('.extent,.selection').style("stroke-width",2.5/d3.event.transform.k)
+          })
+        this.internaldata.bgrect.attr('transform', d3.event.transform)
+      }
     },
     onData(griddata) {
       
